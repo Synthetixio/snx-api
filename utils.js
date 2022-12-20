@@ -1,0 +1,145 @@
+const redis = require('redis');
+const winston = require('winston');
+const winstonCloudwatch = require('winston-cloudwatch');
+const crypto = require('crypto');
+const BigNumber = require('bignumber.js');
+const { ethers } = require('ethers');
+const { synthetix } = require('@synthetixio/contracts-interface');
+const { formatEther } = synthetix({ network: 'mainnet' }).utils;
+
+const redisClient = redis.createClient({
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: process.env.REDIS_PORT,
+  },
+  password: process.env.REDIS_PASSWORD,
+});
+redisClient.connect();
+
+const transports = [
+  new winston.transports.Console({
+    format: winston.format.combine(
+      winston.format.splat(),
+      winston.format.colorize(),
+      winston.format.timestamp(),
+      winston.format.printf(({ level, message, timestamp }) => {
+        if (process.env.NODE_APP_INSTANCE) {
+          return `${timestamp} [cluster: ${process.env.NODE_APP_INSTANCE}] ${level}: ${message}`;
+        } else {
+          return `${timestamp} ${level}: ${message}`;
+        }
+      }),
+    ),
+  }),
+];
+if (
+  process.env.AWS_CW_REGION &&
+  process.env.AWS_CW_LOG_GROUP &&
+  process.env.AWS_CW_ACCESS_KEY_ID &&
+  process.env.AWS_CW_SECRET_ACCESS_KEY
+) {
+  const startTime = new Date().toISOString();
+  transports.push(
+    new winstonCloudwatch({
+      logGroupName: process.env.AWS_CW_LOG_GROUP,
+      logStreamName: () => {
+        let date = new Date().toISOString().split('T')[0];
+        return `snx-api-server-${date}-${crypto
+          .createHash('md5')
+          .update(startTime)
+          .digest('hex')}`;
+      },
+      messageFormatter: (log) => {
+        if (process.env.NODE_APP_INSTANCE) {
+          return `[cluster: ${process.env.NODE_APP_INSTANCE}] ${log.level}: ${log.message}`;
+        } else {
+          return `${log.level}: ${log.message}`;
+        }
+      },
+      awsAccessKeyId: process.env.AWS_CW_ACCESS_KEY_ID,
+      awsSecretKey: process.env.AWS_CW_SECRET_ACCESS_KEY,
+      awsRegion: process.env.AWS_CW_REGION,
+      jsonMessage: true,
+    }),
+  );
+}
+
+const log = winston.createLogger({
+  level: 'debug',
+  transports,
+});
+
+const mainProvider = new ethers.providers.StaticJsonRpcProvider({
+  url: process.env.MAIN_PROVIDER_URL,
+  user: process.env.MAIN_PROVIDER_USER,
+  password: process.env.MAIN_PROVIDER_PASSWORD,
+});
+
+const mainOVMProvider = new ethers.providers.StaticJsonRpcProvider({
+  url: process.env.MAIN_OVM_PROVIDER_URL,
+  user: process.env.MAIN_OVM_PROVIDER_USER,
+  password: process.env.MAIN_OVM_PROVIDER_PASSWORD,
+  network: 'optimism',
+});
+
+module.exports = {
+  snxContractInterface: (backupProvider) => {
+    const snxjs = synthetix({
+      network: 'mainnet',
+      provider: backupProvider ? backupProvider : mainProvider,
+    });
+    return snxjs.contracts;
+  },
+  snxOVMContractInterface: (backupOVMProvider) => {
+    const snxjsOVM = synthetix({
+      network: 'mainnet-ovm',
+      provider: backupOVMProvider ? backupOVMProvider : mainOVMProvider,
+    });
+    return snxjsOVM.contracts;
+  },
+  formatEther: (value) => formatEther(value),
+  bigNumber: (value) => new BigNumber(value),
+  formatEtherBn: (value) =>
+    module.exports.bigNumber(module.exports.formatEther(value)),
+  getBackupProvider: (type) => {
+    if (type === 'optimism') {
+      return new ethers.providers.StaticJsonRpcProvider({
+        url: process.env.BACKUP_OVM_PROVIDER_URL,
+        user: process.env.BACKUP_OVM_PROVIDER_USER,
+        password: process.env.BACKUP_OVM_PROVIDER_PASSWORD,
+        network: 'optimism',
+      });
+    } else if (type === 'ethereum') {
+      return new ethers.providers.StaticJsonRpcProvider({
+        url: process.env.BACKUP_PROVIDER_URL,
+        user: process.env.BACKUP_PROVIDER_USER,
+        password: process.env.BACKUP_PROVIDER_PASSWORD,
+      });
+    }
+  },
+  log,
+  redisClient,
+  getCache: async (key) => {
+    try {
+      const cacheValue = JSON.parse(await redisClient.get(key));
+      return cacheValue;
+    } catch (error) {
+      throw new Error(
+        `[cache] There was an issue with fetching the cache for ${key}: ${error.message}`,
+      );
+    }
+  },
+  setCache: async (key, value, ttl) => {
+    try {
+      const cacheSet = await redisClient.set(key, JSON.stringify(value), {
+        EX: process.env.CACHE_TIME || ttl,
+        NX: true,
+      });
+      return cacheSet;
+    } catch (error) {
+      throw new Error(
+        `[cache] There was an issue with setting the cache for ${key}: ${error.message}`,
+      );
+    }
+  },
+};

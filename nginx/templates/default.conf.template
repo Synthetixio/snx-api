@@ -1,0 +1,55 @@
+limit_req_zone $binary_remote_addr zone=ip:10m rate=3r/s;
+limit_req zone=ip burst=5 nodelay;
+limit_req_status 429;
+
+limit_conn_zone $binary_remote_addr zone=conn:10m;
+limit_conn conn 10;
+limit_conn_status 429;
+
+client_body_timeout 20s;
+client_header_timeout 20s;
+
+client_body_buffer_size 200K;
+client_header_buffer_size 2k;
+client_max_body_size 200k;
+large_client_header_buffers 3 1k;
+
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-NginX-Proxy true;
+proxy_set_header Host $http_host;
+proxy_cache_bypass $http_upgrade;
+proxy_redirect off;
+
+server {
+    listen            ${NGINX_PORT};
+    listen       [::]:${NGINX_PORT};
+    server_name  ${NGINX_HOST};
+
+    gzip on;
+    gzip_disable "msie6";
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+    gzip_min_length 0;
+    gzip_types text/plain application/json;
+
+    root   /usr/share/nginx/html;
+
+    location / {
+        proxy_pass ${PROXY_URL};
+    }
+
+    location /docs {
+        limit_req zone=ip burst=10 nodelay;
+        
+        proxy_pass ${PROXY_URL};
+    }
+
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
