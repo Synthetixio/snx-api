@@ -18,7 +18,7 @@ jobs:
 
       - uses: actions/setup-node@8c91899e586c5b171469028077307d293428b516
         with:
-          node-version: 5ae9e2a8802a39347de461f2cd132864b99c2228
+          node-version: 18.12
 
       - name: Set yarn cache directory
         run: yarn config set cache-folder .yarn-cache
