@@ -1,3 +1,6 @@
 #!/bin/bash
-cd /home/ubuntu/snx-api &&
-docker-compose build --no-cache
+home_path=/home/ubuntu
+docker_path=$home_path/.docker/cli-plugins
+
+cd $home_path/snx-api &&
+	$docker_path/docker-compose build --no-cache

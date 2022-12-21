@@ -1,2 +1,4 @@
 #!/bin/bash
-rm -rf /home/ubuntu/snx-api
+home_path=/home/ubuntu
+
+rm -rf $home_path/snx-api
