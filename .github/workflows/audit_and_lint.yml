@@ -57,14 +57,3 @@ jobs:
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline --no-audit
-
-      - name: Lint (changes)
-        if: github.event_name == 'pull_request'
-        uses: trunk-io/trunk-action@274409d390f23841b19a1b84b55339196b56453d
-
-      - name: Lint (codebase)
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
-        uses: trunk-io/trunk-action@274409d390f23841b19a1b84b55339196b56453d
-        with:
-          check-mode: all
-          trunk-token: ${{ secrets.TRUNK_TOKEN }}
