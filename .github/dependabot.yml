@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    open-pull-requests-limit: 5
+    target-branch: 'dev'
+    allow:
+      - dependency-name: '@synthetixio/*'
+        dependency-type: 'production'
+    labels:
+      - 'npm'
+      - 'dependencies'
+    pull-request-branch-name:
+      separator: '-'
