@@ -4,6 +4,9 @@ files:
   - source: /
     destination: /home/ubuntu/snx-api
 hooks:
+  ApplicationStop:
+    - location: scripts/app-stop.sh
+      timeout: 360
   BeforeInstall:
     - location: scripts/before-install.sh
       timeout: 180
@@ -11,7 +14,7 @@ hooks:
     - location: scripts/after-install.sh
       timeout: 180
   ApplicationStart:
-    - location: scripts/boot.sh
+    - location: scripts/app-start.sh
       timeout: 180
   ValidateService:
     - location: scripts/validate.sh
