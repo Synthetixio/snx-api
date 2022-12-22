@@ -131,6 +131,11 @@ module.exports = {
   },
   setCache: async (key, value, ttl) => {
     try {
+      process.env.CACHE_TIME =
+        typeof process.env.CACHE_TIME === 'string'
+          ? parseInt(process.env.CACHE_TIME)
+          : process.env.CACHE_TIME;
+
       const cacheSet = await redisClient.set(key, JSON.stringify(value), {
         EX: process.env.CACHE_TIME || ttl,
         NX: true,

@@ -85,7 +85,10 @@ redisClient.on('ready', () => {
   app.use('/rewardescrow/escrowed-balance', rewardEscrowEscrowedBalanceRouter);
 
   log.debug('[Express] Starting server..');
-  const port = process.env.API_PORT || 3000;
+  const port =
+    typeof process.env.API_PORT === 'string'
+      ? parseInt(process.env.API_PORT)
+      : process.env.API_PORT || 3000;
   const host = process.env.API_HOST || '127.0.0.1';
   app.listen(port, host, () => {
     log.debug('[Express] Setting up swagger docs..');
