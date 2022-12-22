@@ -1343,6 +1343,11 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
+"@trunkio/launcher@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@trunkio/launcher/-/launcher-1.2.3.tgz#a5e7e3c945da98280550f2a4f307ea7cc48eec49"
+  integrity sha512-eq0mhRr4ZlJxzcOJO5/scfQUZ+/kk9iwM8dHXQ6GPMWUq4qz40vW4EMMcYEwjSopJKLNxCVldZrXI02pq9Gx2Q==
+
 "@types/bn.js@^5.1.0":
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-5.1.1.tgz#b51e1b55920a4ca26e9285ff79936bbdec910682"
