@@ -1,9 +1,13 @@
 #!/bin/bash
 
-result=$(curl -s http://localhost:80/status)
+echo "Waiting for 180 seconds before checking health.."
+sleep 180
 
-if [[ $result =~ "OK" ]]; then
-	exit 0
-else
+status_code=$(curl --write-out "%{http_code}" --silent --output /dev/null http://localhost:80/status)
+if [[ $status_code -ne 200 ]]; then
+	echo "App is not healthy - status code: $status_code"
 	exit 1
+else
+	echo "App is responding with status code: $status_code"
+	exit 0
 fi
