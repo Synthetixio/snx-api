@@ -4,18 +4,16 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
-    "dev": "DEBUG=api:* nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "update:deps": "ncu -u && yarn",
-    "lint": "eslint .",
-    "lint:fix": "yarn lint --fix",
-    "prettier": "prettier . --check",
-    "prettier:fix": "yarn prettier --write",
-    "format": "yarn prettier:fix && yarn lint:fix"
+    "start": "./scripts/start-prod-local.sh",
+    "dev": "./scripts/start-dev-local.sh",
+    "docker:start": "node src/server.js",
+    "docker:dev": "DEBUG=api:* nodemon src/server.js",
+    "lint": "trunk check .",
+    "format": "yarn lint && trunk fmt .",
+    "update:deps": "ncu -u && yarn"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudwatch-logs": "3.235.0",
+    "@aws-sdk/client-cloudwatch-logs": "3.236.0",
     "@synthetixio/contracts-interface": "2.76.5",
     "basic-auth": "2.0.1",
     "bignumber.js": "9.1.1",

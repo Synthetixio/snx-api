@@ -1,6 +1,6 @@
 module.exports = [
   {
-    script: 'index.js',
+    script: 'src/server.js',
     name: 'snx-api',
     exec_mode: 'cluster',
     instances: 'max',
