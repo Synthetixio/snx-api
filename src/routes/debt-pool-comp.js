@@ -14,12 +14,19 @@
  *         type: string
  *         enum: [sAAVE, sADA, sAPE, sAUD, sAVAX, sBNB, sBTC, sCHF, sDOGE, sDOT, sDYDX, sDebtRatio, sETH, sETHBTC, sEUR, sGBP, sINR, sJPY, sKRW, sLINK, sMATIC, sOP, sSOL, sUNI, sUSD, sXAG, sXAU, sXMR]
  *       description: (optional) The asset name for which return data for.
+ *     - in: query
+ *       name: net
+ *       required: false
+ *       schema:
+ *         type: string
+ *         enum: [mainnet, optimism]
+ *       description: (optional) The asset name for which return data for.
  *     tags:
  *     - staking
- *     description: Returns outstanding composition of Synthetix debt pool.
+ *     description: Returns outstanding composition of Synthetix debt pool. If `key` query parameter is not provided it returns an array of objects (all assets). If `key` query parameter is provided it returns an object (with requested asset). If `net` query parameter is not provided it returns combined data for both networks. If `net` query parameter is provided it returns data for requested network.
  *     responses:
  *       200:
- *        description: Successful response. If query parameter is not provided it returns an array of objects (all assets). If query parameter is provided it returns an object (with requested asset).
+ *        description: Successful response.
  *        content:
  *          application/json:
  *            schema:
