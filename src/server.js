@@ -4,6 +4,8 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const basicAuth = require('express-basic-auth');
+const favicon = require('serve-favicon');
+const path = require('path');
 
 const swaggerDocs = require('./swagger.js');
 const { redisClient, log } = require('./utils');
@@ -29,15 +31,29 @@ redisClient.on('ready', () => {
   app.set('json spaces', 4);
   app.set('etag', false);
   app.disable('x-powered-by');
+  app.use(favicon(path.join('public', 'favicon.ico')));
 
   app.use((req, res, next) => {
-    log.debug('[Express] Setting no-cache headers..');
-    res.set({
-      'Surrogate-Control': 'no-store',
-      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-      Pragma: 'no-cache',
-      Expires: '0',
-    });
+    if (!req.path.startsWith('/docs/')) {
+      log.debug('[Express] Setting no-cache headers..');
+      res.set({
+        'Surrogate-Control': 'no-store',
+        'Cache-Control':
+          'no-store, no-cache, must-revalidate, proxy-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      });
+    } else {
+      log.debug('[Express] Setting caching headers..');
+      let maxAge = 86400;
+      if (req.path.includes('swagger-ui-init.js')) {
+        maxAge = 0;
+      }
+      res.set({
+        'Cache-Control': `public, max-age=${maxAge}`,
+        Pragma: 'public',
+      });
+    }
     next();
   });
 

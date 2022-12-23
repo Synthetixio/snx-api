@@ -1,10 +1,11 @@
 # SNX-API
 
+Docker with latest docker compose is mandatory.
+
 ## Development (auto-reload included)
 
-- `docker compose -f docker-compose.dev.yml up --force-recreate --no-deps --build cache api proxy`
+- `yarn dev`
 
 ## Production
 
-- Testing: `docker compose up --force-recreate --no-deps --build cache api proxy`
-- Running: `docker compose up -d`
+- `yarn start`

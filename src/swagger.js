@@ -1,6 +1,6 @@
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const packageJson = require('./package.json');
+const packageJson = require('../package.json');
 
 const options = {
   definition: {
@@ -15,7 +15,7 @@ const options = {
       { url: 'http://127.0.0.1:3001', description: 'Local' },
     ],
   },
-  apis: ['./routes/*.js', './routes/**/*.js'],
+  apis: ['./src/routes/*.js', './src/routes/**/*.js'],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
