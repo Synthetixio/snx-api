@@ -55,6 +55,8 @@ services:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
       - SNX_API_PROXY_URL=http://api:3000
+    env_file:
+      - nginx.env
     depends_on:
       - api
     networks:
