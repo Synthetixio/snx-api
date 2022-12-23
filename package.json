@@ -9,7 +9,7 @@
     "docker:start": "node src/server.js",
     "docker:dev": "DEBUG=api:* nodemon src/server.js",
     "lint": "trunk check .",
-    "format": "yarn lint && trunk fmt .",
+    "format": "trunk fmt .",
     "update:deps": "ncu -u && yarn"
   },
   "dependencies": {
