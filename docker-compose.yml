@@ -1,5 +1,14 @@
 version: '3.9'
 
+x-logging: &default-logging
+  driver: awslogs
+  options:
+    mode: non-blocking
+    awslogs-region: us-east-1
+    awslogs-group: snx-api-prod
+    awslogs-create-group: 'true'
+    tag: '{{ with split .ImageName ":" }}{{join . "_"}}{{end}}/{{.Name}}/{{.ID}}'
+
 services:
   api:
     container_name: api
@@ -16,6 +25,7 @@ services:
       - cache
     networks:
       - api
+    logging: *default-logging
 
   cache:
     container_name: cache
@@ -31,6 +41,7 @@ services:
       - redis.env
     networks:
       - api
+    logging: *default-logging
 
   proxy:
     container_name: proxy
@@ -48,6 +59,7 @@ services:
       - api
     networks:
       - api
+    logging: *default-logging
 
 networks:
   api:
