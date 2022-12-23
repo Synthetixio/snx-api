@@ -38,15 +38,31 @@ server {
 
     root   /usr/share/nginx/html;
 
+    location /basic_status
+    {
+            stub_status;
+            allow 127.0.0.1;
+            allow ::1;
+            deny all;
+    }
+
     location / {
-        proxy_pass ${PROXY_URL};
+        proxy_pass ${SNX_API_PROXY_URL};
     }
 
     location /docs {
         limit_req zone=ip burst=10 nodelay;
         
-        proxy_pass ${PROXY_URL};
+        proxy_pass ${SNX_API_PROXY_URL};
     }
+
+    location /debt-pool-comp {
+        proxy_pass ${DEBT_POOL_COMP_PROXY_URL};
+     }
+
+     location /staking-ratio {
+        proxy_pass ${STAKING_RATIO_PROXY_URL};
+     }
 
     error_page   500 502 503 504  /50x.html;
     location = /50x.html {
