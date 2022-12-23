@@ -28,13 +28,14 @@
     "helmet": "6.0.1",
     "morgan": "1.10.0",
     "redis": "4.5.1",
+    "serve-favicon": "2.5.0",
     "swagger-jsdoc": "6.2.7",
     "swagger-ui-express": "4.6.0",
     "winston": "3.8.2",
     "winston-cloudwatch": "6.1.1"
   },
   "devDependencies": {
-    "@trunkio/launcher": "^1.2.3",
+    "@trunkio/launcher": "1.2.3",
     "eslint": "8.30.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.2.1",

@@ -4,6 +4,8 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const basicAuth = require('express-basic-auth');
+const favicon = require('serve-favicon');
+const path = require('path');
 
 const swaggerDocs = require('./swagger.js');
 const { redisClient, log } = require('./utils');
@@ -29,6 +31,7 @@ redisClient.on('ready', () => {
   app.set('json spaces', 4);
   app.set('etag', false);
   app.disable('x-powered-by');
+  app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
   app.use((req, res, next) => {
     log.debug('[Express] Setting no-cache headers..');
