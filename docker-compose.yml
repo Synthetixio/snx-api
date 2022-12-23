@@ -1,13 +1,12 @@
 version: '3.9'
 
-x-logging:
-  &default-logging
+x-logging: &default-logging
   driver: awslogs
   options:
     mode: non-blocking
     awslogs-region: us-east-1
     awslogs-group: snx-api-prod
-    awslogs-create-group: "true"
+    awslogs-create-group: 'true'
     tag: '{{ with split .ImageName ":" }}{{join . "_"}}{{end}}/{{.Name}}/{{.ID}}'
 
 services:
