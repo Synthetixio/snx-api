@@ -7,4 +7,5 @@ cd $home_path/snx-api &&
 	chmod +x aws-env &&
 	AWS_ENV_PATH=/snx-api/prod/api/ AWS_REGION=us-east-1 ./aws-env --format=dotenv >api.env &&
 	AWS_ENV_PATH=/snx-api/prod/redis/ AWS_REGION=us-east-1 ./aws-env --format=dotenv >redis.env &&
+	AWS_ENV_PATH=/snx-api/prod/nginx/ AWS_REGION=us-east-1 ./aws-env --format=dotenv >nginx.env &&
 	$docker_path/docker-compose build --no-cache
