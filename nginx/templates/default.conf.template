@@ -22,6 +22,9 @@ proxy_cache_bypass $http_upgrade;
 proxy_redirect off;
 
 server {
+    include /etc/nginx/bots.d/blockbots.conf;
+    include /etc/nginx/bots.d/ddos.conf;
+
     listen            ${NGINX_PORT};
     listen       [::]:${NGINX_PORT};
     server_name  ${NGINX_HOST};
