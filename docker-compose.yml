@@ -45,10 +45,11 @@ services:
 
   proxy:
     container_name: proxy
-    image: nginx:1.23.3-alpine-slim
+    image: synthetixio/nginx:b6e75e9f12f87d2f02b31cb8bb02709abd1190d1-base
     restart: unless-stopped
     volumes:
       - ./nginx/templates:/etc/nginx/templates
+      - ./nginx/scripts/setup-whitelist.sh:/docker-entrypoint.d/setup-whitelist.sh
     ports:
       - 80:80
     environment:

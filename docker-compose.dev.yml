@@ -39,10 +39,11 @@ services:
 
   proxy:
     container_name: proxy
-    image: synthetixio/nginx:06d38c9064ece06c509207e20ff78225c69ddad9-base
+    image: synthetixio/nginx:b6e75e9f12f87d2f02b31cb8bb02709abd1190d1-base
     restart: unless-stopped
     volumes:
       - ./nginx/templates:/etc/nginx/templates
+      - ./nginx/scripts/setup-whitelist.sh:/docker-entrypoint.d/setup-whitelist.sh
     ports:
       - 3001:80
     environment:
