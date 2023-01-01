@@ -1,7 +1,6 @@
 version: '3.9'
 
-x-logging:
-  &default-logging
+x-logging: &default-logging
   driver: awslogs
   options:
     mode: non-blocking
