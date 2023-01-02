@@ -47,6 +47,8 @@ const {
  *                        OVMSynthetixEscrowVestedBalance:
  *                          type: string
  *                          example: "0x06C6D063896ac733673c4474E44d9268f2402A55"
+ *       444:
+ *        description: You have been banned by WAF.
  *       429:
  *        description: Too many requests, you're being rate-limited.
  *       5XX:

@@ -47,6 +47,8 @@ const {
  *                        OVMTotalSupply:
  *                          type: string
  *                          example: "0x8700dAec35aF8Ff88c16BdF0418774CB3D7599B4"
+ *       444:
+ *        description: You have been banned by WAF.
  *       429:
  *        description: Too many requests, you're being rate-limited.
  *       5XX:
