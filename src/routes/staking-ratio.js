@@ -34,6 +34,8 @@
  *                      example: "77990791.09047478"
  *       401:
  *        description: Unauthorized.
+ *       444:
+ *        description: You have been banned by WAF.
  *       429:
  *        description: Too many requests, you're being rate-limited.
  *       5XX:

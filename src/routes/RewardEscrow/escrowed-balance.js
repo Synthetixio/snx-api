@@ -37,6 +37,8 @@ const {
  *                        rewardEscrowEscrowedBalance:
  *                          type: string
  *                          example: "0xb671F2210B1F6621A2607EA63E6B2DC3e2464d1F"
+ *       444:
+ *        description: You have been banned by WAF.
  *       429:
  *        description: Too many requests, you're being rate-limited.
  *       5XX:
