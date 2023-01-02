@@ -20,7 +20,6 @@ redisClient.on('ready', () => {
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.set('json spaces', 4);
-  app.set('etag', false);
   app.use(favicon(path.join('public', 'favicon.ico')));
 
   app.use((req, res, next) => {

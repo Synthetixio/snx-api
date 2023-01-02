@@ -49,6 +49,7 @@ server {
     root   /usr/share/nginx/html;
 
     location / {
+        etag off;
         proxy_pass ${SNX_API_PROXY_URL};
     }
 
@@ -57,10 +58,12 @@ server {
     }
 
     location /debt-pool-comp {
+        etag off;
         proxy_pass ${DEBT_POOL_COMP_PROXY_URL};
      }
 
     location /staking-ratio {
+        etag off;
         proxy_pass ${STAKING_RATIO_PROXY_URL};
     }
 
