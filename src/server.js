@@ -15,7 +15,7 @@ redisClient.on('ready', () => {
   log.debug('[Redis] Client is connected and ready to use');
   const app = express();
   log.debug('[Express] Setting up middlewares..');
-  app.use(morgan('combined'));
+  // app.use(morgan('combined'));
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cors());
@@ -105,7 +105,7 @@ redisClient.on('ready', () => {
     typeof process.env.API_PORT === 'string'
       ? parseInt(process.env.API_PORT)
       : process.env.API_PORT || 3000;
-  const host = process.env.API_HOST || '127.0.0.1';
+  const host = process.env.API_HOST || 'localhost';
   app.listen(port, host, () => {
     log.debug('[Express] Setting up swagger docs..');
     swaggerDocs(app);

@@ -5,7 +5,7 @@ const packageJson = require('../package.json');
 let servers = [{ url: 'https://api.synthetix.io', description: 'Production' }];
 
 if (process.env.NODE_ENV !== 'production') {
-  servers.push({ url: 'http://127.0.0.1:3001', description: 'Local' });
+  servers.push({ url: 'http://localhost:3001', description: 'Local' });
 }
 
 const options = {
