@@ -1,12 +1,26 @@
 limit_rate 1m;
+waf_zone name=waf size=20m;
 
 server {
-    limit_req zone=reqperip burst=4 nodelay;
-    limit_conn connperip 10;
+    include /etc/nginx/bots.d/blockbots.conf;
 
     listen            ${NGINX_PORT};
     listen       [::]:${NGINX_PORT};
     server_name  ${NGINX_HOST};
+
+    # modsec
+    modsecurity on;
+    modsecurity_rules_file /etc/nginx/modsec/main.conf;
+
+    # waf setup
+    waf on;
+    waf_rule_path /etc/nginx/waf_assets/rules/;
+    waf_mode FULL;
+    waf_cc_deny on rate=100r/m duration=1h zone=waf:cc;
+    waf_cache on capacity=50;
+    # waf_modsecurity on file=/etc/nginx/modsec/main.conf;
+    waf_action blacklist=444 cc_deny=444 modsecurity=follow zone=waf:action;
+    waf_verify_bot on;
 
     root   /usr/share/nginx/html;
 
@@ -15,7 +29,6 @@ server {
     }
 
     location /docs {
-        limit_req zone=reqperip burst=10 nodelay;
         proxy_pass ${SNX_API_PROXY_URL};
     }
 
