@@ -1,6 +1,4 @@
 const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const basicAuth = require('express-basic-auth');
@@ -20,19 +18,9 @@ redisClient.on('ready', () => {
   }
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-  app.use(cors());
-  app.use(
-    helmet.contentSecurityPolicy({
-      directives: {
-        // eslint-disable-next-line quotes
-        'default-src': ["'self'", 'api.synthetix.io'],
-      },
-    }),
-  );
   app.use(cookieParser());
   app.set('json spaces', 4);
   app.set('etag', false);
-  app.disable('x-powered-by');
   app.use(favicon(path.join('public', 'favicon.ico')));
 
   app.use((req, res, next) => {
