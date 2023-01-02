@@ -65,7 +65,7 @@ if (
 }
 
 const log = winston.createLogger({
-  level: 'error',
+  level: process.env.DEBUG ? 'debug' : 'error',
   transports,
 });
 

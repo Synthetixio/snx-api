@@ -15,7 +15,9 @@ redisClient.on('ready', () => {
   log.debug('[Redis] Client is connected and ready to use');
   const app = express();
   log.debug('[Express] Setting up middlewares..');
-  // app.use(morgan('combined'));
+  if (process.env.DEBUG) {
+    app.use(morgan('combined'));
+  }
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
   app.use(cors());
