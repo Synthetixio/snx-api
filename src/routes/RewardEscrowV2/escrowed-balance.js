@@ -47,7 +47,7 @@ const {
  *                        OVMRewardEscrowV2EscrowedBalance:
  *                          type: string
  *                          example: "0x6330D5F08f51057F36F46d6751eCDc0c65Ef7E9e"
- *       444:
+ *       403:
  *        description: You have been banned by WAF.
  *       429:
  *        description: Too many requests, you're being rate-limited.

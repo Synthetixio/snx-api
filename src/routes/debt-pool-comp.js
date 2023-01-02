@@ -159,7 +159,7 @@
  *                      example: "1671833711"
  *       401:
  *        description: Unauthorized.
- *       444:
+ *       403:
  *        description: You have been banned by WAF.
  *       429:
  *        description: Too many requests, you're being rate-limited.

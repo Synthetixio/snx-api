@@ -43,7 +43,7 @@ server {
     waf_cc_deny on rate=${WAF_RATE} duration=${WAF_DURATION} zone=waf:cc;
     waf_cache on capacity=50;
     # waf_modsecurity on file=/etc/nginx/modsec/main.conf;
-    waf_action blacklist=444 cc_deny=444 modsecurity=follow zone=waf:action;
+    waf_action blacklist=403 cc_deny=403 modsecurity=follow zone=waf:action;
     waf_verify_bot on;
 
     root   /usr/share/nginx/html;
