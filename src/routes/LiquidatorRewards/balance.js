@@ -15,8 +15,8 @@ const {
  * /LiquidatorRewards/balance:
  *  get:
  *     tags:
- *     - locked-balance
- *     description: Returns locked SNX balance from LiquidatorRewards contract.
+ *     - escrowed-balance
+ *     description: Returns escrowed SNX balance from LiquidatorRewards contract.
  *     responses:
  *       200:
  *        description: Successful response.
