@@ -146,4 +146,69 @@ module.exports = {
       );
     }
   },
+  getBalanceForContract: async (
+    tokenAddress,
+    contractAddress,
+    options = {},
+  ) => {
+    const balanceOfABI = [
+      {
+        constant: true,
+        inputs: [
+          {
+            name: '_owner',
+            type: 'address',
+          },
+        ],
+        name: 'balanceOf',
+        outputs: [
+          {
+            name: 'balance',
+            type: 'uint256',
+          },
+        ],
+        payable: false,
+        type: 'function',
+      },
+    ];
+    const provider = options.backupProvider
+      ? options.backupProvider
+      : options.network === 'mainnet'
+      ? mainProvider
+      : mainOVMProvider;
+    try {
+      const contract = new ethers.Contract(
+        tokenAddress,
+        balanceOfABI,
+        provider,
+      );
+      log.debug(
+        `Fetching balance of: ${tokenAddress} for contract: ${contractAddress}`,
+      );
+      const balance = module.exports.formatEtherBn(
+        await contract.balanceOf(contractAddress),
+      );
+      log.info(
+        `Balance of: ${tokenAddress} for: ${contractAddress} is: ${balance}`,
+      );
+      return { balance, tokenAddress, contractAddress };
+    } catch (e) {
+      log.warn(`[getBalanceForContract] Error: ${e.message}`);
+      if (e.code === 'NETWORK_ERROR' && !options.retried) {
+        log.warn('[getBalanceForContract] Changing provider and retrying..');
+        return await module.exports.getBalanceForContract(
+          tokenAddress,
+          contractAddress,
+          {
+            network: options.network,
+            backupProvider: module.exports.getBackupProvider(options.network),
+            retried: true,
+          },
+        );
+      }
+      throw new Error(
+        `[getBalanceForContract] Failed to respond: ${e.message}`,
+      );
+    }
+  },
 };
