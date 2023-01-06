@@ -16,7 +16,7 @@ const {
  *  get:
  *     tags:
  *     - supply
- *     description: Returns SNX total supply on L1 and L2.
+ *     description: Returns SNX total supply for L1 and L2.
  *     responses:
  *       200:
  *        description: Successful response.
