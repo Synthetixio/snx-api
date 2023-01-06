@@ -97,10 +97,12 @@ async function getRewardEscrowEscrowedBalance(options = {}) {
   try {
     log.debug('Fetching RewardEscrow escrowed balance..');
     const rewardEscrowEscrowedBalanceContractAddress = snxContractInterface(
+      'mainnet',
       options.provider,
     ).RewardEscrow.address;
     const rewardEscrowEscrowedBalance = formatEtherBn(
       await snxContractInterface(
+        'mainnet',
         options.provider,
       ).RewardEscrow.totalEscrowedBalance(),
     );
@@ -116,7 +118,7 @@ async function getRewardEscrowEscrowedBalance(options = {}) {
         '[getRewardEscrowEscrowedBalance] Changing provider and retrying..',
       );
       return await getRewardEscrowEscrowedBalance({
-        provider: getBackupProvider('ethereum'),
+        provider: getBackupProvider('mainnet'),
         retried: true,
       });
     }

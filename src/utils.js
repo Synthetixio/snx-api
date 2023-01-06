@@ -83,33 +83,32 @@ const mainOVMProvider = new ethers.providers.StaticJsonRpcProvider({
 });
 
 module.exports = {
-  snxContractInterface: (backupProvider) => {
+  snxContractInterface: (network, backupProvider) => {
+    const provider = backupProvider
+      ? backupProvider
+      : network === 'mainnet'
+      ? mainProvider
+      : mainOVMProvider;
+
     const snxjs = synthetix({
-      network: 'mainnet',
-      provider: backupProvider ? backupProvider : mainProvider,
+      network,
+      provider,
     });
     return snxjs.contracts;
-  },
-  snxOVMContractInterface: (backupOVMProvider) => {
-    const snxjsOVM = synthetix({
-      network: 'mainnet-ovm',
-      provider: backupOVMProvider ? backupOVMProvider : mainOVMProvider,
-    });
-    return snxjsOVM.contracts;
   },
   formatEther: (value) => formatEther(value),
   bigNumber: (value) => new BigNumber(value),
   formatEtherBn: (value) =>
     module.exports.bigNumber(module.exports.formatEther(value)),
-  getBackupProvider: (type) => {
-    if (type === 'optimism') {
+  getBackupProvider: (network) => {
+    if (network === 'mainnet-ovm') {
       return new ethers.providers.StaticJsonRpcProvider({
         url: process.env.BACKUP_OVM_PROVIDER_URL,
         user: process.env.BACKUP_OVM_PROVIDER_USER,
         password: process.env.BACKUP_OVM_PROVIDER_PASSWORD,
         network: 'optimism',
       });
-    } else if (type === 'ethereum') {
+    } else if (network === 'mainnet') {
       return new ethers.providers.StaticJsonRpcProvider({
         url: process.env.BACKUP_PROVIDER_URL,
         user: process.env.BACKUP_PROVIDER_USER,
@@ -146,5 +145,47 @@ module.exports = {
         `[cache] There was an issue with setting the cache for ${key}: ${error.message}`,
       );
     }
+  },
+  getBalanceForContract: async (
+    tokenAddress,
+    contractAddress,
+    options = {},
+  ) => {
+    const balanceOfABI = [
+      {
+        constant: true,
+        inputs: [
+          {
+            name: '_owner',
+            type: 'address',
+          },
+        ],
+        name: 'balanceOf',
+        outputs: [
+          {
+            name: 'balance',
+            type: 'uint256',
+          },
+        ],
+        payable: false,
+        type: 'function',
+      },
+    ];
+    const provider = options.backupProvider
+      ? options.backupProvider
+      : options.network === 'mainnet'
+      ? mainProvider
+      : mainOVMProvider;
+    const contract = new ethers.Contract(tokenAddress, balanceOfABI, provider);
+    log.debug(
+      `Fetching balance of: ${tokenAddress} for contract: ${contractAddress}`,
+    );
+    const balance = module.exports.formatEtherBn(
+      await contract.balanceOf(contractAddress),
+    );
+    log.info(
+      `Balance of: ${tokenAddress} for: ${contractAddress} is: ${balance}`,
+    );
+    return balance;
   },
 };

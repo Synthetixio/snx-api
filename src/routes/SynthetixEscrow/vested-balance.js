@@ -5,7 +5,6 @@ const {
   log,
   formatEtherBn,
   snxContractInterface,
-  snxOVMContractInterface,
   getBackupProvider,
   getCache,
   setCache,
@@ -118,10 +117,12 @@ async function getSynthetixEscrowVestedBalance(options = {}) {
   try {
     log.debug('Fetching SynthetixEscrow vested balance..');
     const synthetixEscrowVestedBalanceContractAddress = snxContractInterface(
+      'mainnet',
       options.provider,
     ).SynthetixEscrow.address;
     const synthetixEscrowVestedBalance = formatEtherBn(
       await snxContractInterface(
+        'mainnet',
         options.provider,
       ).SynthetixEscrow.totalVestedBalance(),
     );
@@ -139,7 +140,7 @@ async function getSynthetixEscrowVestedBalance(options = {}) {
         '[getSynthetixEscrowVestedBalance] Changing provider and retrying..',
       );
       return await getSynthetixEscrowVestedBalance({
-        provider: getBackupProvider('ethereum'),
+        provider: getBackupProvider('mainnet'),
         retried: true,
       });
     }
@@ -152,10 +153,13 @@ async function getSynthetixEscrowVestedBalance(options = {}) {
 async function getOVMSynthetixEscrowVestedBalance(options = {}) {
   try {
     log.debug('[ovm] Fetching SynthetixEscrow vested balance..');
-    const OVMSynthetixEscrowVestedBalanceContractAddress =
-      snxOVMContractInterface(options.provider).SynthetixEscrow.address;
+    const OVMSynthetixEscrowVestedBalanceContractAddress = snxContractInterface(
+      'mainnet-ovm',
+      options.provider,
+    ).SynthetixEscrow.address;
     const OVMSynthetixEscrowVestedBalance = formatEtherBn(
-      await snxOVMContractInterface(
+      await snxContractInterface(
+        'mainnet-ovm',
         options.provider,
       ).SynthetixEscrow.totalVestedBalance(),
     );
@@ -173,7 +177,7 @@ async function getOVMSynthetixEscrowVestedBalance(options = {}) {
         '[getOVMSynthetixEscrowVestedBalance] Changing provider and retrying..',
       );
       return await getOVMSynthetixEscrowVestedBalance({
-        provider: getBackupProvider('optimism'),
+        provider: getBackupProvider('mainnet-ovm'),
         retried: true,
       });
     }
