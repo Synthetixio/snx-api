@@ -12,5 +12,6 @@ COPY . .
 
 FROM builder as api
 USER node
+ENV CACHE_TIME 1
 EXPOSE 3000
 CMD ["yarn", "docker:dev"]

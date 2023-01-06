@@ -16,6 +16,8 @@ const {
   getOVMRewardEscrowV2EscrowedBalance,
 } = require('./RewardEscrowV2/escrowed-balance');
 
+const { getLiquidatorRewardsBalance } = require('./LiquidatorRewards/balance');
+
 /**
  * @openapi
  * /circulating-supply:
@@ -134,6 +136,10 @@ async function circulatingSupplyHandler(req, res, next) {
         rewardEscrowV2EscrowedBalance,
       } = await getRewardEscrowV2EscrowedBalance();
 
+      const liquidatorRewardsBalanceData = await getLiquidatorRewardsBalance(
+        'mainnet',
+      );
+
       // optimism
       const { OVMTotalSupplyContractAddress, OVMTotalSupply } =
         await getOVMTotalSupply();
@@ -148,13 +154,19 @@ async function circulatingSupplyHandler(req, res, next) {
         OVMRewardEscrowV2EscrowedBalance,
       } = await getOVMRewardEscrowV2EscrowedBalance();
 
+      const OVMLiquidatorRewardsBalanceData = await getLiquidatorRewardsBalance(
+        'mainnet-ovm',
+      );
+
       log.debug('Calculating circulating supply..');
       const circulatingSupply = totalSupply
         .minus(synthetixEscrowVestedBalance)
         .minus(rewardEscrowEscrowedBalance)
         .minus(rewardEscrowV2EscrowedBalance)
+        .minus(liquidatorRewardsBalanceData.balance)
         .minus(OVMSynthetixEscrowVestedBalance)
-        .minus(OVMRewardEscrowV2EscrowedBalance);
+        .minus(OVMRewardEscrowV2EscrowedBalance)
+        .minus(OVMLiquidatorRewardsBalanceData.balance);
       log.info(`Circulating supply is ${circulatingSupply}`);
 
       const responseData = {
@@ -163,9 +175,11 @@ async function circulatingSupplyHandler(req, res, next) {
         synthetixEscrowVestedBalance,
         rewardEscrowEscrowedBalance,
         rewardEscrowV2EscrowedBalance,
+        liquidatorRewardsBalance: liquidatorRewardsBalanceData.balance,
         OVMTotalSupply,
         OVMSynthetixEscrowVestedBalance,
         OVMRewardEscrowV2EscrowedBalance,
+        OVMLiquidatorRewardsBalance: OVMLiquidatorRewardsBalanceData.balance,
         contracts: {
           ethereum: {
             totalSupply: totalSupplyContractAddress,
@@ -175,6 +189,8 @@ async function circulatingSupplyHandler(req, res, next) {
               rewardEscrowEscrowedBalanceContractAddress,
             rewardEscrowV2EscrowedBalance:
               rewardEscrowV2EscrowedBalanceContractAddress,
+            liquidatorRewardsBalance:
+              liquidatorRewardsBalanceData.contractAddress,
           },
           optimism: {
             OVMTotalSupply: OVMTotalSupplyContractAddress,
@@ -182,6 +198,8 @@ async function circulatingSupplyHandler(req, res, next) {
               OVMSynthetixEscrowVestedBalanceContractAddress,
             OVMRewardEscrowV2EscrowedBalance:
               OVMRewardEscrowV2EscrowedBalanceContractAddress,
+            OVMLiquidatorRewardsBalance:
+              OVMLiquidatorRewardsBalanceData.contractAddress,
           },
         },
       };
