@@ -14,6 +14,7 @@ const {
 const {
   getRewardEscrowEscrowedBalance,
 } = require('./RewardEscrow/escrowed-balance');
+const { getLiquidatorRewardsBalance } = require('./LiquidatorRewards/balance');
 
 /**
  * @openapi
@@ -61,6 +62,10 @@ router.get('/', async (req, res, next) => {
     await getOVMRewardEscrowV2EscrowedBalance();
     log.info('[health] Checking getRewardEscrowEscrowedBalance..');
     await getRewardEscrowEscrowedBalance();
+    log.info('[health] Checking getLiquidatorRewardsBalance on mainnet..');
+    await getLiquidatorRewardsBalance('mainnet');
+    log.info('[health] Checking getLiquidatorRewardsBalance on mainnet-ovm..');
+    await getLiquidatorRewardsBalance('mainnet-ovm');
     log.info('[health] HEALTHY!');
     res.json({ status: 'OK' });
   } catch (error) {
