@@ -5,7 +5,6 @@ const {
   log,
   formatEtherBn,
   snxContractInterface,
-  snxOVMContractInterface,
   getBackupProvider,
   getCache,
   setCache,
@@ -110,10 +109,15 @@ async function totalSupplyHandler(req, res, next) {
 async function getTotalSupply(options = {}) {
   try {
     log.debug('Fetching total supply..');
-    const totalSupplyContractAddress = snxContractInterface(options.provider)
-      .Synthetix.address;
+    const totalSupplyContractAddress = snxContractInterface(
+      'mainnet',
+      options.provider,
+    ).Synthetix.address;
     const totalSupply = formatEtherBn(
-      await snxContractInterface(options.provider).Synthetix.totalSupply(),
+      await snxContractInterface(
+        'mainnet',
+        options.provider,
+      ).Synthetix.totalSupply(),
     );
     log.info(`Total supply is ${totalSupply}`);
     return { totalSupplyContractAddress, totalSupply };
@@ -133,11 +137,15 @@ async function getTotalSupply(options = {}) {
 async function getOVMTotalSupply(options = {}) {
   try {
     log.debug('[ovm] Fetching total supply..');
-    const OVMTotalSupplyContractAddress = snxOVMContractInterface(
+    const OVMTotalSupplyContractAddress = snxContractInterface(
+      'mainnet-ovm',
       options.provider,
     ).Synthetix.address;
     const OVMTotalSupply = formatEtherBn(
-      await snxOVMContractInterface(options.provider).Synthetix.totalSupply(),
+      await snxContractInterface(
+        'mainnet-ovm',
+        options.provider,
+      ).Synthetix.totalSupply(),
     );
     log.info(`[ovm] Total supply is ${OVMTotalSupply}`);
     return { OVMTotalSupplyContractAddress, OVMTotalSupply };

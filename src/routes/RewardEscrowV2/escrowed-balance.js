@@ -5,7 +5,6 @@ const {
   log,
   formatEtherBn,
   snxContractInterface,
-  snxOVMContractInterface,
   getBackupProvider,
   getCache,
   setCache,
@@ -118,10 +117,12 @@ async function getRewardEscrowV2EscrowedBalance(options = {}) {
   try {
     log.debug('Fetching RewardEscrowV2 escrowed balance..');
     const rewardEscrowV2EscrowedBalanceContractAddress = snxContractInterface(
+      'mainnet',
       options.provider,
     ).RewardEscrowV2.address;
     const rewardEscrowV2EscrowedBalance = formatEtherBn(
       await snxContractInterface(
+        'mainnet',
         options.provider,
       ).RewardEscrowV2.totalEscrowedBalance(),
     );
@@ -153,9 +154,11 @@ async function getOVMRewardEscrowV2EscrowedBalance(options = {}) {
   try {
     log.debug('[ovm] Fetching RewardEscrowV2 escrowed balance..');
     const OVMRewardEscrowV2EscrowedBalanceContractAddress =
-      snxOVMContractInterface(options.provider).RewardEscrowV2.address;
+      snxContractInterface('mainnet-ovm', options.provider).RewardEscrowV2
+        .address;
     const OVMRewardEscrowV2EscrowedBalance = formatEtherBn(
-      await snxOVMContractInterface(
+      await snxContractInterface(
+        'mainnet-ovm',
         options.provider,
       ).RewardEscrowV2.totalEscrowedBalance(),
     );

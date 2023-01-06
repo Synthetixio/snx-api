@@ -97,10 +97,12 @@ async function getRewardEscrowEscrowedBalance(options = {}) {
   try {
     log.debug('Fetching RewardEscrow escrowed balance..');
     const rewardEscrowEscrowedBalanceContractAddress = snxContractInterface(
+      'mainnet',
       options.provider,
     ).RewardEscrow.address;
     const rewardEscrowEscrowedBalance = formatEtherBn(
       await snxContractInterface(
+        'mainnet',
         options.provider,
       ).RewardEscrow.totalEscrowedBalance(),
     );

@@ -83,19 +83,18 @@ const mainOVMProvider = new ethers.providers.StaticJsonRpcProvider({
 });
 
 module.exports = {
-  snxContractInterface: (backupProvider) => {
+  snxContractInterface: (network, backupProvider) => {
+    const provider = backupProvider
+      ? backupProvider
+      : network === 'mainnet'
+      ? mainProvider
+      : mainOVMProvider;
+
     const snxjs = synthetix({
-      network: 'mainnet',
-      provider: backupProvider ? backupProvider : mainProvider,
+      network,
+      provider,
     });
     return snxjs.contracts;
-  },
-  snxOVMContractInterface: (backupOVMProvider) => {
-    const snxjsOVM = synthetix({
-      network: 'mainnet-ovm',
-      provider: backupOVMProvider ? backupOVMProvider : mainOVMProvider,
-    });
-    return snxjsOVM.contracts;
   },
   formatEther: (value) => formatEther(value),
   bigNumber: (value) => new BigNumber(value),
