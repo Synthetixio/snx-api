@@ -26,7 +26,7 @@ const {
  *  get:
  *     tags:
  *     - supply
- *     description: Returns SNX circulating supply on L1 and L2.
+ *     description: Returns combined SNX circulating supply from L1 and L2.
  *     responses:
  *       200:
  *        description: Successful response.
