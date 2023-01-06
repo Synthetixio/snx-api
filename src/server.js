@@ -93,6 +93,10 @@ redisClient.on('ready', () => {
     require('./routes/LiquidatorRewards/balance').router;
   app.use('/liquidatorrewards/balance', liquidatorRewardsBalanceRouter);
 
+  const synthetixBridgeEscrowBalanceRouter =
+    require('./routes/SynthetixBridgeEscrow/balance').router;
+  app.use('/synthetixbridgeescrow/balance', synthetixBridgeEscrowBalanceRouter);
+
   log.debug('[Express] Starting server..');
   const port =
     typeof process.env.API_PORT === 'string'

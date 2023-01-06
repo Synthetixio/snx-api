@@ -15,8 +15,10 @@ const {
   getRewardEscrowV2EscrowedBalance,
   getOVMRewardEscrowV2EscrowedBalance,
 } = require('./RewardEscrowV2/escrowed-balance');
-
 const { getLiquidatorRewardsBalance } = require('./LiquidatorRewards/balance');
+const {
+  getSynthetixBridgeEscrowBalance,
+} = require('./SynthetixBridgeEscrow/balance');
 
 /**
  * @openapi
@@ -48,6 +50,12 @@ const { getLiquidatorRewardsBalance } = require('./LiquidatorRewards/balance');
  *                rewardEscrowV2EscrowedBalance:
  *                  type: string
  *                  example: "58795426.272404595327975783"
+ *                liquidatorRewardsBalance:
+ *                  type: string
+ *                  example: "2035169.82647455828232327"
+ *                synthetixBridgeEscrowBalance:
+ *                  type: string
+ *                  example: "90615339.513130952531588288"
  *                OVMTotalSupply:
  *                  type: string
  *                  example: "89132014.499559654122877079"
@@ -57,6 +65,9 @@ const { getLiquidatorRewardsBalance } = require('./LiquidatorRewards/balance');
  *                OVMRewardEscrowV2EscrowedBalance:
  *                  type: string
  *                  example: "34299695.279932558082573391"
+ *                OVMLiquidatorRewardsBalance:
+ *                  type: string
+ *                  example: "322414.5006437149942302"
  *                contracts:
  *                  type: object
  *                  properties:
@@ -75,6 +86,12 @@ const { getLiquidatorRewardsBalance } = require('./LiquidatorRewards/balance');
  *                        rewardEscrowV2EscrowedBalance:
  *                          type: string
  *                          example: "0xAc86855865CbF31c8f9FBB68C749AD5Bd72802e3"
+ *                        liquidatorRewardsBalance:
+ *                          type: string
+ *                          example: "0xf79603a71144e415730C1A6f57F366E4Ea962C00"
+ *                        synthetixBridgeEscrowBalance:
+ *                          type: string
+ *                          example: "0x5Fd79D46EBA7F351fe49BFF9E87cdeA6c821eF9f"
  *                    optimism:
  *                      type: object
  *                      properties:
@@ -87,6 +104,9 @@ const { getLiquidatorRewardsBalance } = require('./LiquidatorRewards/balance');
  *                        OVMRewardEscrowV2EscrowedBalance:
  *                          type: string
  *                          example: "0x6330D5F08f51057F36F46d6751eCDc0c65Ef7E9e"
+ *                        OVMLiquidatorRewardsBalance:
+ *                          type: string
+ *                          example: "0xF4EebDD0704021eF2a6Bbe993fdf93030Cd784b4"
  *       403:
  *        description: You have been banned by WAF.
  *       429:
@@ -140,6 +160,9 @@ async function circulatingSupplyHandler(req, res, next) {
         'mainnet',
       );
 
+      const synthetixBridgeEscrowBalanceData =
+        await getSynthetixBridgeEscrowBalance('mainnet');
+
       // optimism
       const { OVMTotalSupplyContractAddress, OVMTotalSupply } =
         await getOVMTotalSupply();
@@ -160,10 +183,12 @@ async function circulatingSupplyHandler(req, res, next) {
 
       log.debug('Calculating circulating supply..');
       const circulatingSupply = totalSupply
+        .plus(OVMTotalSupply)
         .minus(synthetixEscrowVestedBalance)
         .minus(rewardEscrowEscrowedBalance)
         .minus(rewardEscrowV2EscrowedBalance)
         .minus(liquidatorRewardsBalanceData.balance)
+        .minus(synthetixBridgeEscrowBalanceData.balance)
         .minus(OVMSynthetixEscrowVestedBalance)
         .minus(OVMRewardEscrowV2EscrowedBalance)
         .minus(OVMLiquidatorRewardsBalanceData.balance);
@@ -176,6 +201,7 @@ async function circulatingSupplyHandler(req, res, next) {
         rewardEscrowEscrowedBalance,
         rewardEscrowV2EscrowedBalance,
         liquidatorRewardsBalance: liquidatorRewardsBalanceData.balance,
+        synthetixBridgeEscrowBalance: synthetixBridgeEscrowBalanceData.balance,
         OVMTotalSupply,
         OVMSynthetixEscrowVestedBalance,
         OVMRewardEscrowV2EscrowedBalance,
@@ -191,6 +217,8 @@ async function circulatingSupplyHandler(req, res, next) {
               rewardEscrowV2EscrowedBalanceContractAddress,
             liquidatorRewardsBalance:
               liquidatorRewardsBalanceData.contractAddress,
+            synthetixBridgeEscrowBalance:
+              synthetixBridgeEscrowBalanceData.contractAddress,
           },
           optimism: {
             OVMTotalSupply: OVMTotalSupplyContractAddress,
