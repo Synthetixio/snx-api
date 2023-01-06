@@ -101,14 +101,14 @@ module.exports = {
   formatEtherBn: (value) =>
     module.exports.bigNumber(module.exports.formatEther(value)),
   getBackupProvider: (type) => {
-    if (type === 'optimism') {
+    if (type === 'mainnet-ovm') {
       return new ethers.providers.StaticJsonRpcProvider({
         url: process.env.BACKUP_OVM_PROVIDER_URL,
         user: process.env.BACKUP_OVM_PROVIDER_USER,
         password: process.env.BACKUP_OVM_PROVIDER_PASSWORD,
         network: 'optimism',
       });
-    } else if (type === 'ethereum') {
+    } else if (type === 'mainnet') {
       return new ethers.providers.StaticJsonRpcProvider({
         url: process.env.BACKUP_PROVIDER_URL,
         user: process.env.BACKUP_PROVIDER_USER,

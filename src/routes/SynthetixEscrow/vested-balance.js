@@ -140,7 +140,7 @@ async function getSynthetixEscrowVestedBalance(options = {}) {
         '[getSynthetixEscrowVestedBalance] Changing provider and retrying..',
       );
       return await getSynthetixEscrowVestedBalance({
-        provider: getBackupProvider('ethereum'),
+        provider: getBackupProvider('mainnet'),
         retried: true,
       });
     }
@@ -177,7 +177,7 @@ async function getOVMSynthetixEscrowVestedBalance(options = {}) {
         '[getOVMSynthetixEscrowVestedBalance] Changing provider and retrying..',
       );
       return await getOVMSynthetixEscrowVestedBalance({
-        provider: getBackupProvider('optimism'),
+        provider: getBackupProvider('mainnet-ovm'),
         retried: true,
       });
     }

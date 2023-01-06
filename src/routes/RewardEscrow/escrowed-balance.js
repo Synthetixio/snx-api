@@ -118,7 +118,7 @@ async function getRewardEscrowEscrowedBalance(options = {}) {
         '[getRewardEscrowEscrowedBalance] Changing provider and retrying..',
       );
       return await getRewardEscrowEscrowedBalance({
-        provider: getBackupProvider('ethereum'),
+        provider: getBackupProvider('mainnet'),
         retried: true,
       });
     }

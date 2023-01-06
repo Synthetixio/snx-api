@@ -126,7 +126,7 @@ async function getTotalSupply(options = {}) {
     if (e.code === 'NETWORK_ERROR' && !options.retried) {
       log.warn('[getTotalSupply] Changing provider and retrying..');
       return await getTotalSupply({
-        provider: getBackupProvider('ethereum'),
+        provider: getBackupProvider('mainnet'),
         retried: true,
       });
     }
@@ -154,7 +154,7 @@ async function getOVMTotalSupply(options = {}) {
     if (e.code === 'NETWORK_ERROR' && !options.retried) {
       log.warn('[getOVMTotalSupply] Changing provider and retrying..');
       return await getOVMTotalSupply({
-        provider: getBackupProvider('optimism'),
+        provider: getBackupProvider('mainnet-ovm'),
         retried: true,
       });
     }

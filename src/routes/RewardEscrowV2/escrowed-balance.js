@@ -140,7 +140,7 @@ async function getRewardEscrowV2EscrowedBalance(options = {}) {
         '[getRewardEscrowV2EscrowedBalance] Changing provider and retrying..',
       );
       return await getRewardEscrowV2EscrowedBalance({
-        provider: getBackupProvider('ethereum'),
+        provider: getBackupProvider('mainnet'),
         retried: true,
       });
     }
@@ -176,7 +176,7 @@ async function getOVMRewardEscrowV2EscrowedBalance(options = {}) {
         '[getOVMRewardEscrowV2EscrowedBalance] Changing provider and retrying..',
       );
       return await getOVMRewardEscrowV2EscrowedBalance({
-        provider: getBackupProvider('optimism'),
+        provider: getBackupProvider('mainnet-ovm'),
         retried: true,
       });
     }
