@@ -68,6 +68,16 @@ server {
         proxy_pass ${STAKING_RATIO_PROXY_URL};
     }
 
+    location /pyth-mainnet {
+        more_clear_headers 'etag';
+        proxy_pass ${PYTH_MAINNET_PROXY_URL};
+    }
+
+    location /pyth-testnet {
+        more_clear_headers 'etag';
+        proxy_pass ${PYTH_TESTNET_PROXY_URL};
+    }
+
     # for zabbix
     location /basic_status {
         allow 127.0.0.1;
