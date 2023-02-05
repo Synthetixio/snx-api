@@ -39,7 +39,7 @@ services:
 
   proxy:
     container_name: proxy
-    image: synthetixio/nginx:3e21c76b1ee501013b7886a3d1207fbead2428ce-base
+    image: synthetixio/nginx-debug:45b07c6441a68408d1f1adbf54dd771ffcfe4c1e-base
     restart: unless-stopped
     volumes:
       - ./nginx/templates:/etc/nginx/templates
@@ -50,12 +50,18 @@ services:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
       - SNX_API_PROXY_URL=http://api:3000
+      - DEBT_POOL_COMP_PROXY_URL=http://host.docker.internal:3002/
+      - STAKING_RATIO_PROXY_URL=http://host.docker.internal:3001/
+      - PYTH_MAINNET_PROXY_URL=http://host.docker.internal:4200/api/
+      - PYTH_TESTNET_PROXY_URL=http://host.docker.internal:4200/api/
     env_file:
       - nginx.env
     depends_on:
       - api
     networks:
       - api
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
 
 networks:
   api:
