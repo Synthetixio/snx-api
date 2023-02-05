@@ -50,6 +50,10 @@ services:
       - NGINX_HOST=localhost
       - NGINX_PORT=80
       - SNX_API_PROXY_URL=http://api:3000
+      - DEBT_POOL_COMP_PROXY_URL=http://localhost:3002/
+      - STAKING_RATIO_PROXY_URL=http://localhost:3001/
+      - PYTH_MAINNET_PROXY_URL=http://localhost:4200/
+      - PYTH_TESTNET_PROXY_URL=http://localhost:4200/
     env_file:
       - nginx.env
     depends_on:
