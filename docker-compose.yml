@@ -62,7 +62,7 @@ services:
       - api
     networks:
       - api
-    logging: *default-logging
+    # logging: *default-logging
 
 networks:
   api:
