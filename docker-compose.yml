@@ -1,6 +1,7 @@
 version: '3.9'
 
-x-logging: &default-logging
+x-logging:
+  &default-logging
   driver: awslogs
   options:
     mode: non-blocking
@@ -45,7 +46,7 @@ services:
 
   proxy:
     container_name: proxy
-    image: synthetixio/nginx:002fc4bd0f64d1cca60efcabffb9c17677cd63a1-base
+    image: synthetixio/nginx:58efca8d2ad1fbd060dd56315dfe5308d346ebd1-base
     restart: unless-stopped
     volumes:
       - ./nginx/templates:/etc/nginx/templates
