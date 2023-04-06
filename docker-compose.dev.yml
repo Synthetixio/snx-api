@@ -24,7 +24,7 @@ services:
 
   cache:
     container_name: cache
-    image: redis:7.0.7-alpine
+    image: redis:7.0.10-alpine
     restart: unless-stopped
     ports:
       - 6379:6379
@@ -39,7 +39,7 @@ services:
 
   proxy:
     container_name: proxy
-    image: synthetixio/nginx-debug:002fc4bd0f64d1cca60efcabffb9c17677cd63a1-base
+    image: synthetixio/nginx-debug:604f26c1990320d4a24c08074f2ee82d1db9bec4-base
     restart: unless-stopped
     volumes:
       - ./nginx/templates:/etc/nginx/templates
