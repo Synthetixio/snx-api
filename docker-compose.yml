@@ -45,7 +45,7 @@ services:
 
   proxy:
     container_name: proxy
-    image: synthetixio/nginx:604f26c1990320d4a24c08074f2ee82d1db9bec4-base
+    image: synthetixio/nginx:41158a4bf17aca53222e6b101633ddfa5af7724c-base
     restart: unless-stopped
     volumes:
       - ./nginx/templates:/etc/nginx/templates

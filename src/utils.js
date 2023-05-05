@@ -1,7 +1,5 @@
 const redis = require('redis');
 const winston = require('winston');
-const winstonCloudwatch = require('winston-cloudwatch');
-const crypto = require('crypto');
 const BigNumber = require('bignumber.js');
 const { ethers } = require('ethers');
 const { synthetix } = require('@synthetixio/contracts-interface');
@@ -32,37 +30,6 @@ const transports = [
     ),
   }),
 ];
-if (
-  process.env.AWS_CW_REGION &&
-  process.env.AWS_CW_LOG_GROUP &&
-  process.env.AWS_CW_ACCESS_KEY_ID &&
-  process.env.AWS_CW_SECRET_ACCESS_KEY
-) {
-  const startTime = new Date().toISOString();
-  transports.push(
-    new winstonCloudwatch({
-      logGroupName: process.env.AWS_CW_LOG_GROUP,
-      logStreamName: () => {
-        let date = new Date().toISOString().split('T')[0];
-        return `snx-api-server-${date}-${crypto
-          .createHash('md5')
-          .update(startTime)
-          .digest('hex')}`;
-      },
-      messageFormatter: (log) => {
-        if (process.env.NODE_APP_INSTANCE) {
-          return `[cluster: ${process.env.NODE_APP_INSTANCE}] ${log.level}: ${log.message}`;
-        } else {
-          return `${log.level}: ${log.message}`;
-        }
-      },
-      awsAccessKeyId: process.env.AWS_CW_ACCESS_KEY_ID,
-      awsSecretKey: process.env.AWS_CW_SECRET_ACCESS_KEY,
-      awsRegion: process.env.AWS_CW_REGION,
-      jsonMessage: true,
-    }),
-  );
-}
 
 const log = winston.createLogger({
   level: process.env.DEBUG ? 'debug' : 'error',
