@@ -35,13 +35,13 @@ jobs:
 
       - name: Lint (changes)
         if: github.event_name == 'pull_request'
-        uses: trunk-io/trunk-action@4f077db8a20117a021b787adbf62729ae143c19e
+        uses: trunk-io/trunk-action@e5f1a3f123a2440f9cd28e036495a1c1f2a20568
         with:
           trunk-token: ${{ secrets.TRUNK_TOKEN }}
 
       - name: Lint (codebase)
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
-        uses: trunk-io/trunk-action@4f077db8a20117a021b787adbf62729ae143c19e
+        uses: trunk-io/trunk-action@e5f1a3f123a2440f9cd28e036495a1c1f2a20568
         with:
           check-mode: all
           trunk-token: ${{ secrets.TRUNK_TOKEN }}
