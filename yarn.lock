@@ -1321,19 +1321,19 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-5.3.0.tgz#0ec9264cf54a527671d990eb874e030b55b70dcc"
   integrity sha512-CX6t4SYQ37lzxicAqsBtxA3OseeoVrh9cSJ5PFYam0GksYlupRfy1A+Q4aYD3zvcfECLc0zO2u+ZnR2UYKvCrw==
 
-"@synthetixio/contracts-interface@2.77.2":
-  version "2.77.2"
-  resolved "https://registry.yarnpkg.com/@synthetixio/contracts-interface/-/contracts-interface-2.77.2.tgz#52b6b3cb313023d64343cdcf372461b0f8b618d8"
-  integrity sha512-O5HoV65JEspMl+L3koR+A0iXxYJVoEuxnfAFcja+Tj9eumFzbl/vcPizl3exRE2uNc4q17bkEItT7PN9DgJYlQ==
+"@synthetixio/contracts-interface@2.77.4":
+  version "2.77.4"
+  resolved "https://registry.yarnpkg.com/@synthetixio/contracts-interface/-/contracts-interface-2.77.4.tgz#00bd9aacf3857e9977a6fa4182ab52d2e9f59bd0"
+  integrity sha512-gr57R6u2KG9WtTTzIFEVMsXh89NPuSXTFem+UhX+qFEfOC6wJ8D9t5ux0ETzxfxl29pbHM1Qwkvhf280XS32WQ==
   dependencies:
-    "@synthetixio/contracts" "1.2.0"
+    "@synthetixio/contracts" "1.2.2"
     ethers "^5.7.2"
-    synthetix "2.86.1"
+    synthetix "2.89.1"
 
-"@synthetixio/contracts@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@synthetixio/contracts/-/contracts-1.2.0.tgz#261d47c4e3ff13da47807fd8afcade64c27eb324"
-  integrity sha512-XHJBf5Ksz+yIVwdnTCX+kgLr3FyqFH3a9tGkYU95G3r8erNl6FqApEJ2QRbo2jfLiTVucsNYu4Com45HNjY/Pg==
+"@synthetixio/contracts@1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@synthetixio/contracts/-/contracts-1.2.2.tgz#d455b41947d6838c4d8be7fbcda5253fbbcbb93d"
+  integrity sha512-2d3SUi8ehs9ggzAJ7uJmpvFBZ4TKU9DRkqNas8hft19/xDn23bFJ/gSpos+4fvNGfD/t23yBWDOO2DUQD1sypA==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/providers" "^5.7.2"
@@ -4942,10 +4942,10 @@ swagger-ui-express@4.6.3:
   dependencies:
     swagger-ui-dist ">=4.11.0"
 
-synthetix@2.86.1:
-  version "2.86.1"
-  resolved "https://registry.yarnpkg.com/synthetix/-/synthetix-2.86.1.tgz#bc9a92cd98f847eb90a8126daf35e8523d7559fc"
-  integrity sha512-EO6w8NAVAy6m+GFxR/NfTL66eIVdwC6xERSK0c8zs627oISKfJNutrZMWWufwOa6Ih0fTlksgQIzlmBqlliIVQ==
+synthetix@2.89.1:
+  version "2.89.1"
+  resolved "https://registry.yarnpkg.com/synthetix/-/synthetix-2.89.1.tgz#6958386d6b1cc39afb7473baba68468b7dab7d22"
+  integrity sha512-7Z84GOaKUmGSshWpEFC0mP6UO0833RnEjjJVQ8ph92+1SlB7G+l1Tg7UNbqK0xcuuELC9MM4WvZQvotddpx+IA==
   dependencies:
     "@nomiclabs/hardhat-etherscan" "^3.1.0"
     abi-decoder "^2.3.0"
