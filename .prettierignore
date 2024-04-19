@@ -2,3 +2,4 @@ node_modules
 .trunk
 .eslintrc.js
 .prettierrc.js
+.yarn
