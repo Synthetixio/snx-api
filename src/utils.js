@@ -54,8 +54,8 @@ module.exports = {
     const provider = backupProvider
       ? backupProvider
       : network === 'mainnet'
-      ? mainProvider
-      : mainOVMProvider;
+        ? mainProvider
+        : mainOVMProvider;
 
     const snxjs = synthetix({
       network,
@@ -141,8 +141,8 @@ module.exports = {
     const provider = options.backupProvider
       ? options.backupProvider
       : options.network === 'mainnet'
-      ? mainProvider
-      : mainOVMProvider;
+        ? mainProvider
+        : mainOVMProvider;
     const contract = new ethers.Contract(tokenAddress, balanceOfABI, provider);
     log.debug(
       `Fetching balance of: ${tokenAddress} for contract: ${contractAddress}`,

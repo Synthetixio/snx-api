@@ -156,9 +156,8 @@ async function circulatingSupplyHandler(req, res, next) {
         rewardEscrowV2EscrowedBalance,
       } = await getRewardEscrowV2EscrowedBalance();
 
-      const liquidatorRewardsBalanceData = await getLiquidatorRewardsBalance(
-        'mainnet',
-      );
+      const liquidatorRewardsBalanceData =
+        await getLiquidatorRewardsBalance('mainnet');
 
       const synthetixBridgeEscrowBalanceData =
         await getSynthetixBridgeEscrowBalance('mainnet');
@@ -177,9 +176,8 @@ async function circulatingSupplyHandler(req, res, next) {
         OVMRewardEscrowV2EscrowedBalance,
       } = await getOVMRewardEscrowV2EscrowedBalance();
 
-      const OVMLiquidatorRewardsBalanceData = await getLiquidatorRewardsBalance(
-        'mainnet-ovm',
-      );
+      const OVMLiquidatorRewardsBalanceData =
+        await getLiquidatorRewardsBalance('mainnet-ovm');
 
       log.debug('Calculating circulating supply..');
       const circulatingSupply = totalSupply
