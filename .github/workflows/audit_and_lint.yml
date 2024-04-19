@@ -53,3 +53,6 @@ jobs:
 
       - name: Install dependencies
         run: yarn --frozen-lockfile --prefer-offline --no-audit
+
+      - name: Lint
+        run: yarn lint
