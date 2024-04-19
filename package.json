@@ -8,8 +8,8 @@
     "dev": "./scripts/start-dev-local.sh",
     "docker:start": "node src/server.js",
     "docker:dev": "DEBUG=api:* nodemon src/server.js",
-    "lint": "eslint . --ext js && prettier --check **/*.js",
-    "format": "eslint --fix **/*.js && prettier --write **/*.js",
+    "lint": "eslint . --ext js && prettier --check src/**",
+    "format": "eslint --fix src/** && prettier --write src/**",
     "update:deps": "ncu -u && yarn"
   },
   "dependencies": {
