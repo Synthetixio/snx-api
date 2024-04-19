@@ -1,4 +1,5 @@
 const redis = require('redis');
+const postgres = require('serverless-postgres');
 const winston = require('winston');
 const BigNumber = require('bignumber.js');
 const { ethers } = require('ethers');
@@ -13,6 +14,15 @@ const redisClient = redis.createClient({
   password: process.env.REDIS_PASSWORD,
 });
 redisClient.connect();
+
+const postgresClient = new postgres({
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_NAME,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
+});
+postgresClient.connect();
 
 const transports = [
   new winston.transports.Console({
@@ -54,8 +64,8 @@ module.exports = {
     const provider = backupProvider
       ? backupProvider
       : network === 'mainnet'
-      ? mainProvider
-      : mainOVMProvider;
+        ? mainProvider
+        : mainOVMProvider;
 
     const snxjs = synthetix({
       network,
@@ -85,6 +95,7 @@ module.exports = {
   },
   log,
   redisClient,
+  postgresClient,
   getCache: async (key) => {
     try {
       const cacheValue = JSON.parse(await redisClient.get(key));
@@ -141,8 +152,8 @@ module.exports = {
     const provider = options.backupProvider
       ? options.backupProvider
       : options.network === 'mainnet'
-      ? mainProvider
-      : mainOVMProvider;
+        ? mainProvider
+        : mainOVMProvider;
     const contract = new ethers.Contract(tokenAddress, balanceOfABI, provider);
     log.debug(
       `Fetching balance of: ${tokenAddress} for contract: ${contractAddress}`,
