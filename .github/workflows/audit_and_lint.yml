@@ -22,7 +22,7 @@ jobs:
         run: audit-ci --critical --report-type full
 
       - name: Lockfile lint
-        run: lockfile-lint -p yarn.lock --type yarn --allowed-hosts npm --empty-hostname true --validate-package-names
+        run: lockfile-lint -p yarn.lock --type yarn --allowed-hosts yarn --empty-hostname false --validate-https
 
   build:
     needs: audit
