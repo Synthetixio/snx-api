@@ -1,23 +1,32 @@
 const express = require('express');
 const router = express.Router();
 
-const { log, postgresClient, getCache, setCache } = require('../utils');
+const { log, postgresClient, getCache, setCache } = require('../../../utils');
 
 /**
  * @openapi
- * /v3-base-apy:
+ * /v3/Base/sc-pool-apy:
  *  get:
  *     tags:
  *     - v3
- *     description: Returns current APY for Base (Spartan Council Pool).
+ *     description: Returns current APY for Spartan Council Pool on Base.
  *     responses:
  *       200:
  *        description: Successful response.
  *        content:
- *          text/plain:
+ *          application/json:
  *            schema:
- *              type: string
- *              example: OK
+ *              type: object
+ *              properties:
+ *                aprPnl:
+ *                  type: number
+ *                  example: 0.13656878060168257
+ *                aprRewards:
+ *                  type: number
+ *                  example: 0.33047981877022653
+ *                aprCombined:
+ *                  type: number
+ *                  example: 0.46704859937190907
  *       401:
  *        description: Unauthorized.
  *       403:
@@ -31,7 +40,7 @@ const { log, postgresClient, getCache, setCache } = require('../utils');
  */
 router.get('/', async (req, res, next) => {
   try {
-    const cacheKey = 'v3-base-apy';
+    const cacheKey = 'sc-pool-apy';
     log.debug('Checking cache..');
     const cachedResponse = await getCache(cacheKey);
     if (cachedResponse) {
@@ -58,7 +67,7 @@ router.get('/', async (req, res, next) => {
       res.json(responseData);
     }
   } catch (error) {
-    log.error(`[v3-base-apy] Error: ${error.message}`);
+    log.error(`[v3BaseSCPoolAPY] Error: ${error.message}`);
     next(error);
   }
 });

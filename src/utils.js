@@ -1,11 +1,10 @@
-const redis = require('redis');
-const postgres = require('serverless-postgres');
 const winston = require('winston');
 const BigNumber = require('bignumber.js');
 const { ethers } = require('ethers');
 const { synthetix } = require('@synthetixio/contracts-interface');
 const { formatEther } = synthetix({ network: 'mainnet' }).utils;
 
+const redis = require('redis');
 const redisClient = redis.createClient({
   socket: {
     host: process.env.REDIS_HOST,
@@ -15,6 +14,7 @@ const redisClient = redis.createClient({
 });
 redisClient.connect();
 
+const postgres = require('pg').Client;
 const postgresClient = new postgres({
   user: process.env.PG_USER,
   host: process.env.PG_HOST,

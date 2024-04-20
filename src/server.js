@@ -98,14 +98,11 @@ redisClient.on('ready', () => {
   app.use('/synthetixbridgeescrow/balance', synthetixBridgeEscrowBalanceRouter);
 
   postgresClient.on('error', (err) =>
-    log.error(`[Postgres] Client error: ${err}`),
+    log.error(`[Postgres] Client error: ${err.stack}`),
   );
-  redisClient.on('ready', () => {
-    log.debug('[Postgres] Client is connected and ready to use');
-    log.debug('[Express] Setting up routes related to postgres..');
-    const v3BaseApyRouter = require('./routes/v3-base-apy');
-    app.use('/v3-base-apy', v3BaseApyRouter);
-  });
+  log.debug('[Express] Setting up routes related to postgres..');
+  const v3BaseSCPoolAPYRouter = require('./routes/v3/base/sc-pool-apy.js');
+  app.use('/v3/base/sc-pool-apy', v3BaseSCPoolAPYRouter);
 
   log.debug('[Express] Starting server..');
   const port =
