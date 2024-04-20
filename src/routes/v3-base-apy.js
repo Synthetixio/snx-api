@@ -40,7 +40,7 @@ router.get('/', async (req, res, next) => {
     } else {
       log.debug('Cache not found, executing..');
       const queryResult = await postgresClient.query(
-        `select ts, pool_id, collateral_type, apr_7d, apr_7d_pnl, apr_7d_rewards from base_mainnet.fct_core_apr WHERE pool_id = 1 order by ts desc limit 1;`,
+        'select ts, pool_id, collateral_type, apr_7d, apr_7d_pnl, apr_7d_rewards from base_mainnet.fct_core_apr WHERE pool_id = 1 order by ts desc limit 1;',
       );
 
       const { apr_7d, apr_7d_pnl, apr_7d_rewards } = queryResult.rows[0];
