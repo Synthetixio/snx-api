@@ -10,7 +10,7 @@
     "docker:dev": "DEBUG=api:* nodemon src/server.js",
     "lint": "eslint . --ext js && prettier --check src/**",
     "format": "eslint --fix src/** && prettier --write src/**",
-    "update:deps": "ncu -u && yarn"
+    "update:deps": "ncu -u && pnpm install"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "3.556.0",
@@ -37,6 +37,5 @@
     "nodemon": "3.1.0",
     "npm-check-updates": "16.14.18",
     "prettier": "2.8.8"
-  },
-  "packageManager": "yarn@1.22.19"
+  }
 }
