@@ -6,10 +6,12 @@ const cacheKey = 'sc-pool-apy';
 
 fetchDataFromPostgres();
 const cacheTime =
-  (process.env.CACHE_TIME =
+  ((process.env.CACHE_TIME =
     typeof process.env.CACHE_TIME === 'string'
       ? parseInt(process.env.CACHE_TIME)
-      : process.env.CACHE_TIME) * 1000;
+      : process.env.CACHE_TIME) -
+    30) *
+  1000;
 setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
 
 /**
