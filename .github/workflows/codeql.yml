@@ -14,13 +14,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@04df1262e6247151b5ac09cd2c303ac36ad3f62b
+        uses: github/codeql-action/init@99c9897648dded3fe63d6f328c46089dd57735ca
         with:
           queries: security-and-quality
           languages: javascript
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@04df1262e6247151b5ac09cd2c303ac36ad3f62b
+        uses: github/codeql-action/analyze@99c9897648dded3fe63d6f328c46089dd57735ca
