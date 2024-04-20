@@ -6,7 +6,7 @@ const favicon = require('serve-favicon');
 const path = require('path');
 
 const swaggerDocs = require('./swagger.js');
-const { redisClient, log } = require('./utils');
+const { redisClient, postgresClient, log } = require('./utils');
 
 redisClient.on('error', (err) => log.error(`[Redis] Client error: ${err}`));
 redisClient.on('ready', () => {
@@ -97,6 +97,13 @@ redisClient.on('ready', () => {
     require('./routes/SynthetixBridgeEscrow/balance').router;
   app.use('/synthetixbridgeescrow/balance', synthetixBridgeEscrowBalanceRouter);
 
+  postgresClient.on('error', (err) =>
+    log.error(`[Postgres] Client error: ${err.stack}`),
+  );
+  log.debug('[Express] Setting up routes related to postgres..');
+  const v3BaseSCPoolAPYRouter = require('./routes/v3/base/sc-pool-apy.js');
+  app.use('/v3/base/sc-pool-apy', v3BaseSCPoolAPYRouter);
+
   log.debug('[Express] Starting server..');
   const port =
     typeof process.env.API_PORT === 'string'
@@ -121,6 +128,8 @@ process.on('SIGINT', () => {
   (async () => {
     log.debug('[Redis] Closing connection..');
     await redisClient.quit();
+    log.debug('[Postgres] Closing connection..');
+    await postgresClient.end();
   })();
   log.debug('[Express] Quitting..');
   process.exit(0);

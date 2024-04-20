@@ -4,8 +4,8 @@ Docker with latest docker compose is mandatory.
 
 ## Development (auto-reload included)
 
-- `yarn dev`
+- `pnpm dev`
 
 ## Production
 
-- `yarn start`
+- `pnpm start`

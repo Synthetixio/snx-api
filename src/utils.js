@@ -1,10 +1,10 @@
-const redis = require('redis');
 const winston = require('winston');
 const BigNumber = require('bignumber.js');
 const { ethers } = require('ethers');
 const { synthetix } = require('@synthetixio/contracts-interface');
 const { formatEther } = synthetix({ network: 'mainnet' }).utils;
 
+const redis = require('redis');
 const redisClient = redis.createClient({
   socket: {
     host: process.env.REDIS_HOST,
@@ -13,6 +13,16 @@ const redisClient = redis.createClient({
   password: process.env.REDIS_PASSWORD,
 });
 redisClient.connect();
+
+const postgres = require('pg').Client;
+const postgresClient = new postgres({
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_NAME,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
+});
+postgresClient.connect();
 
 const transports = [
   new winston.transports.Console({
@@ -85,6 +95,7 @@ module.exports = {
   },
   log,
   redisClient,
+  postgresClient,
   getCache: async (key) => {
     try {
       const cacheValue = JSON.parse(await redisClient.get(key));
