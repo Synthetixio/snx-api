@@ -1,7 +1,16 @@
 const express = require('express');
 const router = express.Router();
-
 const { log, postgresClient, getCache, setCache } = require('../../../utils');
+
+const cacheKey = 'sc-pool-apy';
+
+fetchDataFromPostgres();
+const cacheTime =
+  (process.env.CACHE_TIME =
+    typeof process.env.CACHE_TIME === 'string'
+      ? parseInt(process.env.CACHE_TIME)
+      : process.env.CACHE_TIME) * 1000;
+setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
 
 /**
  * @openapi
@@ -40,7 +49,6 @@ const { log, postgresClient, getCache, setCache } = require('../../../utils');
  */
 router.get('/', async (req, res, next) => {
   try {
-    const cacheKey = 'sc-pool-apy';
     log.debug('Checking cache..');
     const cachedResponse = await getCache(cacheKey);
     if (cachedResponse) {
@@ -48,22 +56,7 @@ router.get('/', async (req, res, next) => {
       res.json(cachedResponse);
     } else {
       log.debug('Cache not found, executing..');
-      const queryResult = await postgresClient.query(
-        'select ts, pool_id, collateral_type, apr_7d, apr_7d_pnl, apr_7d_rewards from base_mainnet.fct_core_apr WHERE pool_id = 1 order by ts desc limit 1;',
-      );
-
-      const { apr_7d, apr_7d_pnl, apr_7d_rewards } = queryResult.rows[0];
-      const aprPnl = parseFloat(apr_7d_pnl);
-      const aprRewards = parseFloat(apr_7d_rewards);
-      const aprCombined = parseFloat(apr_7d);
-
-      const responseData = {
-        aprPnl,
-        aprRewards,
-        aprCombined,
-      };
-      log.debug('Setting cache..');
-      await setCache(cacheKey, responseData, 60);
+      const responseData = await fetchDataFromPostgres();
       res.json(responseData);
     }
   } catch (error) {
@@ -73,3 +66,24 @@ router.get('/', async (req, res, next) => {
 });
 
 module.exports = router;
+
+async function fetchDataFromPostgres() {
+  log.debug('[v3BaseSCPoolAPY] Fetching data from postgres..');
+  const queryResult = await postgresClient.query(
+    'select ts, pool_id, collateral_type, apr_7d, apr_7d_pnl, apr_7d_rewards from base_mainnet.fct_core_apr WHERE pool_id = 1 order by ts desc limit 1;',
+  );
+
+  const { apr_7d, apr_7d_pnl, apr_7d_rewards } = queryResult.rows[0];
+  const aprPnl = parseFloat(apr_7d_pnl);
+  const aprRewards = parseFloat(apr_7d_rewards);
+  const aprCombined = parseFloat(apr_7d);
+
+  const responseData = {
+    aprPnl,
+    aprRewards,
+    aprCombined,
+  };
+  log.debug('[v3BaseSCPoolAPY] Setting cache..');
+  await setCache(cacheKey, responseData, 60);
+  return responseData;
+}
