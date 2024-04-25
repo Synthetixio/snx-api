@@ -104,6 +104,9 @@ redisClient.on('ready', () => {
   const v3BaseSCPoolAPYRouter = require('./routes/v3/base/sc-pool-apy.js');
   app.use('/v3/base/sc-pool-apy', v3BaseSCPoolAPYRouter);
 
+  const v3BaseSNXBuybackRouter = require('./routes/v3/base/snx-buyback.js');
+  app.use('/v3/base/snx-buyback', v3BaseSNXBuybackRouter);
+
   log.debug('[Express] Starting server..');
   const port =
     typeof process.env.API_PORT === 'string'
