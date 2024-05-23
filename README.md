@@ -4,8 +4,8 @@ Docker with latest docker compose is mandatory.
 
 ## Development (auto-reload included)
 
-- `pnpm dev`
+- `pnpm dev` (use this for dev)
 
 ## Production
 
-- `pnpm start`
+- `pnpm start` (this is not intended to work on localhost)
