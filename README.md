@@ -9,3 +9,10 @@ Docker with latest docker compose is mandatory.
 ## Production
 
 - `pnpm start` (this is not intended to work on localhost)
+
+## Release
+
+- push changes to dev
+- open PR from dev to main (promote dev to main)
+- merge PR
+- wait for API to be automatically deployed to production
