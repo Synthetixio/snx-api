@@ -16,17 +16,19 @@ setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
 
 /**
  * @openapi
- * /v3/Base/sc-pool-apy:
+ * /v3/Base/sc-pool-apy-history:
  *  get:
  *     tags:
  *     - v3
- *     description: Returns current APY for Spartan Council Pool on Base.
+ *     description: Returns historical APY for Spartan Council Pool on Base.
  *     responses:
  *       200:
  *         description: Successful response.
  *         content:
  *           application/json:
- *             schema:
+ *            schema:
+ *              type: array
+ *              items:
  *               type: object
  *               properties:
  *                 timestamp:
