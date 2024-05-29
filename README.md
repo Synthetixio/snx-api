@@ -15,4 +15,4 @@ Docker with latest docker compose is mandatory.
 - push changes to dev
 - open PR from dev to main (promote dev to main)
 - merge PR
-- wait for API to be automatically deployed to production
+- wait for API to be automatically deployed to production (can take up to 15 mins)
