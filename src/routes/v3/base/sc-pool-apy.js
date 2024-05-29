@@ -163,7 +163,7 @@ module.exports = router;
 async function fetchDataFromPostgres() {
   log.debug('[v3BaseSCPoolAPY] Fetching data from postgres..');
   const queryResult = await postgresClient.query(
-    'select ts, pool_id collateral_type, collateral_value, debt, hourly_issuance, hourly_pnl, cumulative_pnl, cumulative_issuance, rewards_usd, hourly_pnl_pct, hourly_rewards_pct, apr_24h, apy_24h, apr_7d, apy_7d, apr_28d, apy_28d, apr_24h_pnl, apy_24h_pnl, apr_7d_pnl, apy_7d_pnl, apr_28d_pnl, apy_28d_pnl, apr_24h_rewards, apy_24h_rewards, apr_7d_rewards, apy_7d_rewards, apr_28d_rewards, apy_28d_rewards from base_mainnet.fct_core_apr WHERE pool_id = 1 order by ts desc limit 100000;',
+    'select ts, pool_id, collateral_type, collateral_value, debt, hourly_issuance, hourly_pnl, cumulative_pnl, cumulative_issuance, rewards_usd, hourly_pnl_pct, hourly_rewards_pct, apr_24h, apy_24h, apr_7d, apy_7d, apr_28d, apy_28d, apr_24h_pnl, apy_24h_pnl, apr_7d_pnl, apy_7d_pnl, apr_28d_pnl, apy_28d_pnl, apr_24h_rewards, apy_24h_rewards, apr_7d_rewards, apy_7d_rewards, apr_28d_rewards, apy_28d_rewards from base_mainnet.fct_core_apr WHERE pool_id = 1 order by ts desc limit 100000;',
   );
 
   const dailyResults = queryResult.rows
