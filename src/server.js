@@ -101,6 +101,7 @@ redisClient.on('ready', () => {
     log.error(`[Postgres] Client error: ${err.stack}`),
   );
   log.debug('[Express] Setting up routes related to postgres..');
+
   const v3BaseSCPoolAPYRouter = require('./routes/v3/base/sc-pool-apy.js');
   app.use('/v3/base/sc-pool-apy', v3BaseSCPoolAPYRouter);
 
@@ -109,6 +110,12 @@ redisClient.on('ready', () => {
 
   const v3BaseSNXBuybackRouter = require('./routes/v3/base/snx-buyback.js');
   app.use('/v3/base/snx-buyback', v3BaseSNXBuybackRouter);
+
+  const v3ArbitrumSCPoolAPYRouter = require('./routes/v3/arbitrum/sc-pool-apy.js');
+  app.use('/v3/arbitrum/sc-pool-apy', v3ArbitrumSCPoolAPYRouter);
+
+  const v3ArbitrumSCPoolAPYHistoryRouter = require('./routes/v3/arbitrum/sc-pool-apy-history.js');
+  app.use('/v3/arbitrum/sc-pool-apy-history', v3ArbitrumSCPoolAPYHistoryRouter);
 
   log.debug('[Express] Starting server..');
   const port =
