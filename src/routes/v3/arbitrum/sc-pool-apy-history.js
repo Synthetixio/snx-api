@@ -156,7 +156,7 @@ router.get('/', async (req, res, next) => {
       res.json(responseData);
     }
   } catch (error) {
-    log.error(`[v3ArbitrumSCPoolAPY] Error: ${error.message}`);
+    log.error(`[v3ArbitrumSCPoolAPYHistory] Error: ${error.message}`);
     next(error);
   }
 });
@@ -164,7 +164,7 @@ router.get('/', async (req, res, next) => {
 module.exports = router;
 
 async function fetchDataFromPostgres() {
-  log.debug('[v3ArbitrumSCPoolAPY] Fetching data from postgres..');
+  log.debug('[v3ArbitrumSCPoolAPYHistory] Fetching data from postgres..');
   const queryResult = await postgresClient.query(
     `WITH latest_records AS (
       SELECT
@@ -243,7 +243,7 @@ async function fetchDataFromPostgres() {
     aprCombined: parseFloat(item.apr_7d),
   }));
 
-  log.debug('[v3ArbitrumSCPoolAPY] Setting cache..');
+  log.debug('[v3ArbitrumSCPoolAPYHistory] Setting cache..');
   await setCache(cacheKey, responseData, 60);
   return responseData;
 }
