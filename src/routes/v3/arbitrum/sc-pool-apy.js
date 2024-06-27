@@ -203,8 +203,7 @@ async function fetchDataFromPostgres() {
       ORDER BY collateral_type, ts DESC
     )
     SELECT * FROM latest_records
-    ORDER BY ts DESC
-    LIMIT 3;`,
+    ORDER BY ts DESC;`,
   );
 
   const responseData = queryResult.rows.map((item) => ({
