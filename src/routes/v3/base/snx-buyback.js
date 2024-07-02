@@ -80,7 +80,13 @@ module.exports = router;
 async function fetchDataFromPostgres() {
   log.debug('[v3BaseSNXBuyback] Fetching data from postgres..');
   const queryResult = await postgresClient.query(
-    'select ts, snx_amount, usd_amount, cumulative_snx_amount, cumulative_usd_amount from base_mainnet.fct_buyback_daily;',
+    `select
+      ts,
+      snx_amount,
+      usd_amount,
+      cumulative_snx_amount,
+      cumulative_usd_amount
+    from prod_base_mainnet.fct_buyback_daily_base_mainnet;`,
   );
 
   const data = queryResult.rows.map(parseAndRenameKeys);
