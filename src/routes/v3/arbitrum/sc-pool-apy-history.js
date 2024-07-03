@@ -198,7 +198,7 @@ async function fetchDataFromPostgres() {
         apy_7d_rewards, 
         apr_28d_rewards, 
         apy_28d_rewards
-      FROM arbitrum_mainnet.fct_core_apr 
+      FROM prod_arbitrum_mainnet.fct_core_apr_arbitrum_mainnet
       WHERE pool_id = 1 
       ORDER BY ts DESC
     )
