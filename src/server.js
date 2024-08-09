@@ -117,6 +117,12 @@ redisClient.on('ready', () => {
   const v3ArbitrumSCPoolAPYHistoryRouter = require('./routes/v3/arbitrum/sc-pool-apy-history.js');
   app.use('/v3/arbitrum/sc-pool-apy-history', v3ArbitrumSCPoolAPYHistoryRouter);
 
+  const v3ArbitrumSCPoolAPYAllRouter = require('./routes/v3/arbitrum/sc-pool-apy-all.js');
+  app.use('/v3/arbitrum/sc-pool-apy-all', v3ArbitrumSCPoolAPYAllRouter);
+
+  const v3BaseSCPoolAPYAllRouter = require('./routes/v3/base/sc-pool-apy-all.js');
+  app.use('/v3/base/sc-pool-apy-all', v3BaseSCPoolAPYAllRouter);
+
   log.debug('[Express] Starting server..');
   const port =
     typeof process.env.API_PORT === 'string'
