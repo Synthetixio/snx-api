@@ -20,7 +20,7 @@ setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
  *  get:
  *     tags:
  *     - v3
- *     description: Returns current APY for Spartan Council Pool on Arbitrum.
+ *     description: Returns current APY for Spartan Council Pool on Mainnet.
  *     responses:
  *       200:
  *         description: Successful response.
