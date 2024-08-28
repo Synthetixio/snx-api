@@ -123,6 +123,12 @@ redisClient.on('ready', () => {
   const v3BaseSCPoolAPYAllRouter = require('./routes/v3/base/sc-pool-apy-all.js');
   app.use('/v3/base/sc-pool-apy-all', v3BaseSCPoolAPYAllRouter);
 
+  const v3MainnetScPoolAPYAllRouter = require('./routes/v3/mainnet/sc-pool-apy-all.js');
+  app.use('/v3/mainnet/sc-pool-apy-all', v3MainnetScPoolAPYAllRouter);
+
+  const v3SnaxVotesRouter = require('./routes/v3/snax-testnet/votes.js');
+  app.use('/v3/snax-testnet/votes', v3SnaxVotesRouter);
+
   log.debug('[Express] Starting server..');
   const port =
     typeof process.env.API_PORT === 'string'
