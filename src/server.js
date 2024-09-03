@@ -129,6 +129,9 @@ redisClient.on('ready', () => {
   const v3SnaxTestnetVotesRouter = require('./routes/v3/snax-testnet/votes.js');
   app.use('/v3/snax-testnet/votes', v3SnaxTestnetVotesRouter);
 
+  const v3SnaxVotesRouter = require('./routes/v3/snax/votes.js');
+  app.use('/v3/snax/votes', v3SnaxVotesRouter);
+
   log.debug('[Express] Starting server..');
   const port =
     typeof process.env.API_PORT === 'string'

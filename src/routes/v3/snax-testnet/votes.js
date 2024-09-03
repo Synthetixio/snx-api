@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { log, postgresClient, getCache, setCache } = require('../../../utils');
 
-const cacheKey = 'snax-votes';
+const cacheKey = 'snax-votes-testnet';
 
 fetchDataFromPostgres();
 const cacheTime =
@@ -20,7 +20,7 @@ setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
  *  get:
  *     tags:
  *     - v3
- *     description: Returns SNX buyback details on Base.
+ *     description: Returns all the votes
  *     responses:
  *       200:
  *        description: Successful response.
@@ -91,7 +91,7 @@ router.get('/', async (req, res, next) => {
       res.json(responseData);
     }
   } catch (error) {
-    log.error(`[v3SnaxVote] Error: ${error.message}`);
+    log.error(`[v3SnaxVote-Testnet] Error: ${error.message}`);
     next(error);
   }
 });
@@ -99,7 +99,7 @@ router.get('/', async (req, res, next) => {
 module.exports = router;
 
 async function fetchDataFromPostgres() {
-  log.debug('[v3SnaxVote] Fetching data from postgres..');
+  log.debug('[v3SnaxVote-Testnet] Fetching data from postgres..');
   const queryResultVotesCasted = await postgresClient.query(
     `select *
     from prod_raw_snax_testnet.gov_vote_recorded_snax_testnet;`,
@@ -148,7 +148,7 @@ async function fetchDataFromPostgres() {
     }, {});
 
   const responseData = allVotes;
-  log.debug('[v3SnaxVote] Setting cache..');
+  log.debug('[v3SnaxVote-Testnet] Setting cache..');
   await setCache(cacheKey, responseData, 60);
   return responseData;
 }
