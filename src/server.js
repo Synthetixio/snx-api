@@ -132,6 +132,16 @@ redisClient.on('ready', () => {
   const v3SnaxVotesRouter = require('./routes/v3/snax/votes.js');
   app.use('/v3/snax/votes', v3SnaxVotesRouter);
 
+  const v3TvlRouter = require('./routes/v3/tvl.js');
+  app.use('/v3/tvl', v3TvlRouter);
+
+  const v3TopAsset = require('./routes/v3/top-asset.js');
+  app.use('/v3/top-asset', v3TopAsset);
+
+  // stats
+  const statsPerpsVolumeRouter = require('./routes/stats/perps-volume.js');
+  app.use('/stats/perps-volume', statsPerpsVolumeRouter);
+
   log.debug('[Express] Starting server..');
   const port =
     typeof process.env.API_PORT === 'string'
