@@ -129,8 +129,8 @@ redisClient.on('ready', () => {
   //  const v3SnaxTestnetVotesRouter = require('./routes/v3/snax-testnet/votes.js');
   //  app.use('/v3/snax-testnet/votes', v3SnaxTestnetVotesRouter);
 
-  const v3SnaxVotesRouter = require('./routes/v3/snax/votes.js');
-  app.use('/v3/snax/votes', v3SnaxVotesRouter);
+  //  const v3SnaxVotesRouter = require('./routes/v3/snax/votes.js');
+  //  app.use('/v3/snax/votes', v3SnaxVotesRouter);
 
   const v3TvlRouter = require('./routes/v3/tvl.js');
   app.use('/v3/tvl', v3TvlRouter);
