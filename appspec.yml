@@ -9,13 +9,13 @@ hooks:
       timeout: 360
   BeforeInstall:
     - location: scripts/before-install.sh
-      timeout: 180
+      timeout: 300
   AfterInstall:
     - location: scripts/after-install.sh
-      timeout: 180
+      timeout: 300
   ApplicationStart:
     - location: scripts/app-start.sh
-      timeout: 180
+      timeout: 300
   ValidateService:
     - location: scripts/validate.sh
       timeout: 80
