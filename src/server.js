@@ -142,14 +142,14 @@ redisClient.on('ready', () => {
   const statsPerpsVolumeRouter = require('./routes/stats/perps-volume.js');
   app.use('/stats/perps-volume', statsPerpsVolumeRouter);
 
-  app.use(function errorHandler(err, req, res, next) {
-    console.error(err);
-    if (res.headersSent) {
-      return next(err);
-    }
-    res.status(500);
-    res.json({ error: err.message });
-  });
+  // app.use(function errorHandler(err, req, res, next) {
+  //   console.error(err);
+  //   if (res.headersSent) {
+  //     return next(err);
+  //   }
+  //   res.status(500);
+  //   res.json({ error: err.message });
+  // });
 
   log.debug('[Express] Starting server..');
   const port =
