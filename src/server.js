@@ -126,8 +126,8 @@ redisClient.on('ready', () => {
   const v3MainnetScPoolAPYAllRouter = require('./routes/v3/mainnet/sc-pool-apy-all.js');
   app.use('/v3/mainnet/sc-pool-apy-all', v3MainnetScPoolAPYAllRouter);
 
-  const v3SnaxTestnetVotesRouter = require('./routes/v3/snax-testnet/votes.js');
-  app.use('/v3/snax-testnet/votes', v3SnaxTestnetVotesRouter);
+  //  const v3SnaxTestnetVotesRouter = require('./routes/v3/snax-testnet/votes.js');
+  //  app.use('/v3/snax-testnet/votes', v3SnaxTestnetVotesRouter);
 
   const v3SnaxVotesRouter = require('./routes/v3/snax/votes.js');
   app.use('/v3/snax/votes', v3SnaxVotesRouter);
@@ -141,6 +141,15 @@ redisClient.on('ready', () => {
   // stats
   const statsPerpsVolumeRouter = require('./routes/stats/perps-volume.js');
   app.use('/stats/perps-volume', statsPerpsVolumeRouter);
+
+  app.use(function errorHandler(err, req, res, next) {
+    console.error(err);
+    if (res.headersSent) {
+      return next(err);
+    }
+    res.status(500);
+    res.json({ error: err.message });
+  });
 
   log.debug('[Express] Starting server..');
   const port =
