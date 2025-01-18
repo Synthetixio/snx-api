@@ -111,6 +111,9 @@ redisClient.on('ready', () => {
   const v3BaseSNXBuybackRouter = require('./routes/v3/base/snx-buyback.js');
   app.use('/v3/base/snx-buyback', v3BaseSNXBuybackRouter);
 
+  const v3BaseLTLeaderboardRouter = require('./routes/v3/base/lt-leaderboard.js');
+  app.use('/v3/base/lt-leaderboard', v3BaseLTLeaderboardRouter);
+
   const v3ArbitrumSCPoolAPYRouter = require('./routes/v3/arbitrum/sc-pool-apy.js');
   app.use('/v3/arbitrum/sc-pool-apy', v3ArbitrumSCPoolAPYRouter);
 
@@ -125,6 +128,9 @@ redisClient.on('ready', () => {
 
   const v3MainnetScPoolAPYAllRouter = require('./routes/v3/mainnet/sc-pool-apy-all.js');
   app.use('/v3/mainnet/sc-pool-apy-all', v3MainnetScPoolAPYAllRouter);
+
+  const v3OptimismLTLeaderboardRouter = require('./routes/v3/optimism/lt-leaderboard.js');
+  app.use('/v3/optimism/lt-leaderboard', v3OptimismLTLeaderboardRouter);
 
   //  const v3SnaxTestnetVotesRouter = require('./routes/v3/snax-testnet/votes.js');
   //  app.use('/v3/snax-testnet/votes', v3SnaxTestnetVotesRouter);
