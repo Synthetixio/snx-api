@@ -83,7 +83,7 @@ async function fetchDataFromPostgres() {
       fees_paid_pct,
       rank
     from prod_optimism_mainnet.lt_leaderboard
-    WHERE epoch_start = date '2025-01-14'
+    WHERE epoch_start > date '2025-01-14'
     ;`,
   );
   const responseData = queryResult.rows;
