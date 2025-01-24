@@ -41,7 +41,13 @@ setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
  *                 fees_paid_pct:
  *                  type: string
  *                  example: "0.210334039122012452233641885"
- *                 rank:
+ *                 fees_rank:
+ *                  type: string
+ *                  example: "1"
+ *                 volume:
+ *                  type: string
+ *                  example: "1"
+ *                 volume_rank:
  *                  type: string
  *                  example: "1"
  *       401:
@@ -81,7 +87,9 @@ async function fetchDataFromPostgres() {
       account,
       total_fees_paid,
       fees_paid_pct,
-      rank
+      fees_rank,
+      volume,
+      volume_rank
     from prod_optimism_mainnet.lt_leaderboard
     WHERE epoch_start > date '2025-01-14'
     ;`,
