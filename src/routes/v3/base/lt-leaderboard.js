@@ -50,6 +50,9 @@ setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
  *                 volume_rank:
  *                  type: string
  *                  example: "1"
+ *                 volume_pct:
+ *                  type: string
+ *                  example: "1"
  *       401:
  *        description: Unauthorized.
  *       403:
@@ -89,7 +92,8 @@ async function fetchDataFromPostgres() {
       fees_paid_pct,
       fees_rank,
       volume,
-      volume_rank
+      volume_rank,
+      volume_pct
     from prod_base_mainnet.lt_leaderboard
     WHERE epoch_start > date '2025-01-14'
     ;`,
