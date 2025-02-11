@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { log, postgresClient, getCache, setCache } = require('../../../utils');
-const cacheKey = 'optimism-lt-trades';
+const cacheKeyPrefix = 'optimism-lt-trades';
 fetchDataFromPostgres();
 const cacheTime =
   ((process.env.CACHE_TIME =
@@ -97,13 +97,16 @@ setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
 router.get('/', async (req, res, next) => {
   try {
     log.debug('Checking cache..');
+    const { account } = req.query;
+    const cacheKey = account ? `${cacheKeyPrefix}-${account}` : cacheKeyPrefix;
     const cachedResponse = await getCache(cacheKey);
+
     if (cachedResponse) {
       log.debug('Cache found');
       res.json(cachedResponse);
     } else {
       log.debug('Cache not found, executing..');
-      const responseData = await fetchDataFromPostgres();
+      const responseData = await fetchDataFromPostgres(account);
       res.json(responseData);
     }
   } catch (error) {
@@ -112,16 +115,27 @@ router.get('/', async (req, res, next) => {
   }
 });
 module.exports = router;
-async function fetchDataFromPostgres() {
+async function fetchDataFromPostgres(account) {
   log.debug('[ltOptimismTrade] Fetching data from postgres..');
-  const queryResult = await postgresClient.query(
-    `select *
+
+  const query = account
+    ? `select *
+    from prod_optimism_mainnet.lt_trades_optimism_mainnet
+    where account = $1
+    order by block_number desc
+    limit 100;`
+    : `select *
     from prod_optimism_mainnet.lt_trades_optimism_mainnet
     order by block_number desc
-    limit 100;`,
+    limit 100;`;
+
+  const queryResult = await postgresClient.query(
+    query,
+    account ? [account] : [],
   );
   const responseData = queryResult.rows;
   log.debug('[ltOptimismTrade] Setting cache..');
+  const cacheKey = account ? `${cacheKeyPrefix}-${account}` : cacheKeyPrefix;
   await setCache(cacheKey, responseData, 60);
   return responseData;
 }
