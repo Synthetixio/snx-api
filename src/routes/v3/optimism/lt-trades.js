@@ -121,7 +121,7 @@ async function fetchDataFromPostgres(account) {
   const query = account
     ? `select *
     from prod_optimism_mainnet.lt_trades_optimism_mainnet
-    where account = ${account}
+    where account = $1
     order by block_number desc
     limit 100;`
     : `select *
@@ -129,7 +129,10 @@ async function fetchDataFromPostgres(account) {
     order by block_number desc
     limit 100;`;
 
-  const queryResult = await postgresClient.query(query);
+  const queryResult = await postgresClient.query(
+    query,
+    account ? [account] : [],
+  );
   const responseData = queryResult.rows;
   log.debug('[ltOptimismTrade] Setting cache..');
   const cacheKey = account ? `${cacheKeyPrefix}-${account}` : cacheKeyPrefix;
