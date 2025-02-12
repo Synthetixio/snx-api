@@ -97,7 +97,10 @@ setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
 router.get('/', async (req, res, next) => {
   try {
     log.debug('Checking cache..');
-    const { account } = req.query;
+    let { account } = req.query;
+    if (account) {
+      account = `0x${account}`;
+    }
     const cacheKey = account ? `${cacheKeyPrefix}-${account}` : cacheKeyPrefix;
     const cachedResponse = await getCache(cacheKey);
 
