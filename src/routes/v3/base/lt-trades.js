@@ -122,13 +122,32 @@ async function fetchDataFromPostgres(account) {
   log.debug('[ltBaseTrade] Fetching data from postgres..');
 
   const query = account
-    ? `select *
-    from prod_base_mainnet.lt_trades_base_mainnet
+    ? `select
+        block_number,
+        ts,
+        transaction_hash,
+        event_name,
+        market,
+        leverage,
+        token,
+        leveraged_token_amount,
+        base_asset_amount
+    from prod_optimism_mainnet.lt_trades_optimism_mainnet
     where account = $1
     order by block_number desc
     limit 100;`
-    : `select *
-    from prod_base_mainnet.lt_trades_base_mainnet
+    : `select
+        block_number,
+        ts,
+        transaction_hash,
+        event_name,
+        market,
+        leverage,
+        token,
+        leveraged_token_amount,
+        base_asset_amount,
+        account
+    from prod_optimism_mainnet.lt_trades_optimism_mainnet
     order by block_number desc
     limit 100;`;
 
