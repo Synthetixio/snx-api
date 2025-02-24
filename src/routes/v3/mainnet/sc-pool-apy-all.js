@@ -197,7 +197,19 @@ async function fetchDataFromPostgres() {
         apr_7d_rewards,
         apy_7d_rewards,
         apr_28d_rewards,
-        apy_28d_rewards
+        apy_28d_rewards,
+        apr_24h_incentive_rewards,
+        apy_24h_incentive_rewards,
+        apr_7d_incentive_rewards,
+        apy_7d_incentive_rewards,
+        apr_28d_incentive_rewards,
+        apy_28d_incentive_rewards,
+        apr_24h_performance,
+        apy_24h_performance,
+        apr_7d_performance,
+        apy_7d_performance,
+        apr_28d_performance,
+        apy_28d_performance
       FROM prod_eth_mainnet.fct_core_apr_eth_mainnet
       WHERE pool_id = 1
       ORDER BY collateral_type, ts DESC
