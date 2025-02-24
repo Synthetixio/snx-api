@@ -197,7 +197,15 @@ async function fetchDataFromPostgres() {
         apr_7d_rewards, 
         apy_7d_rewards, 
         apr_28d_rewards, 
-        apy_28d_rewards
+        apy_28d_rewards,
+        apr_7d_incentive_rewards,
+        apy_7d_incentive_rewards,
+        apr_28d_incentive_rewards,
+        apy_28d_incentive_rewards,
+        apr_7d_performance,
+        apy_7d_performance,
+        apr_28d_performance,
+        apy_28d_performance
       FROM prod_base_mainnet.fct_core_apr_base_mainnet
       WHERE pool_id = 1 
       ORDER BY collateral_type, ts DESC
@@ -237,6 +245,14 @@ async function fetchDataFromPostgres() {
     apy7dRewards: parseFloat(item.apy_7d_rewards),
     apr28dRewards: parseFloat(item.apr_28d_rewards),
     apy28dRewards: parseFloat(item.apy_28d_rewards),
+    apr7dIncentiveRewards: parseFloat(item.apr_7d_incentive_rewards),
+    apy7dIncentiveRewards: parseFloat(item.apy_7d_incentive_rewards),
+    apr28dIncentiveRewards: parseFloat(item.apr_28d_incentive_rewards),
+    apy28dIncentiveRewards: parseFloat(item.apy_28d_incentive_rewards),
+    apr7dPerformance: parseFloat(item.apr_7d_performance),
+    apy7dPerformance: parseFloat(item.apy_7d_performance),
+    apr28dPerformance: parseFloat(item.apr_28d_performance),
+    apy28dPerformance: parseFloat(item.apy_28d_performance),
     aprPnl: parseFloat(item.apr_7d_pnl),
     aprRewards: parseFloat(item.apr_7d_rewards),
     aprCombined: parseFloat(item.apr_7d),
