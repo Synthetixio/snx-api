@@ -2,22 +2,17 @@ const express = require('express');
 const router = express.Router();
 const { log, postgresClient, getCache, setCache } = require('../../../utils');
 const cacheKeyPrefix = 'base-rewards-claimed';
-fetchDataFromPostgres();
-const cacheTime =
-  ((process.env.CACHE_TIME =
-    typeof process.env.CACHE_TIME === 'string'
-      ? parseInt(process.env.CACHE_TIME)
-      : process.env.CACHE_TIME) -
-    30) *
-  1000;
-setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
+
 router.get('/', async (req, res, next) => {
   try {
     log.debug('Checking cache..');
     let { accountId } = req.query;
+    accountId = accountId ? accountId.replace(/\n|\r/g, '') : accountId;
 
-    if (!accountId) {
-      return [];
+    if (!/^\d+$/.test(accountId)) {
+      return res
+        .status(400)
+        .json({ error: 'accountId must be a positive integer' });
     }
 
     const cacheKey = `${cacheKeyPrefix}-${accountId}`;
