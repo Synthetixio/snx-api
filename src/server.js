@@ -117,6 +117,9 @@ redisClient.on('ready', () => {
   const v3BaseLTTradesRouter = require('./routes/v3/base/lt-trades.js');
   app.use('/v3/base/lt-trades', v3BaseLTTradesRouter);
 
+  const v3BaseRewardsClaimedRouter = require('./routes/v3/base/rewards-claimed.js');
+  app.use('/v3/base/rewards-claimed', v3BaseRewardsClaimedRouter);
+
   const v3ArbitrumSCPoolAPYRouter = require('./routes/v3/arbitrum/sc-pool-apy.js');
   app.use('/v3/arbitrum/sc-pool-apy', v3ArbitrumSCPoolAPYRouter);
 
@@ -131,6 +134,9 @@ redisClient.on('ready', () => {
 
   const v3MainnetScPoolAPYAllRouter = require('./routes/v3/mainnet/sc-pool-apy-all.js');
   app.use('/v3/mainnet/sc-pool-apy-all', v3MainnetScPoolAPYAllRouter);
+
+  const v3MainnetRewardsClaimedRouter = require('./routes/v3/mainnet/rewards-claimed.js');
+  app.use('/v3/mainnet/rewards-claimed', v3MainnetRewardsClaimedRouter);
 
   const v3OptimismLTLeaderboardRouter = require('./routes/v3/optimism/lt-leaderboard.js');
   app.use('/v3/optimism/lt-leaderboard', v3OptimismLTLeaderboardRouter);
