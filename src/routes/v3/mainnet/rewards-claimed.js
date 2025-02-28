@@ -48,7 +48,7 @@ async function fetchDataFromPostgres(accountId) {
         amount_usd
     from prod_eth_mainnet.fct_core_rewards_claimed_eth_mainnet
     where account_id = $1
-    limit 500;`;
+    limit 50;`;
 
   const queryResult = await postgresClient.query(query, [accountId]);
   const responseData = queryResult.rows;
