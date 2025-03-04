@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { log, postgresClient, getCache, setCache } = require('../../utils');
+const { log, pgQuery, getCache, setCache } = require('../../utils');
 
 const cacheKey = 'v3-top-asset';
 
@@ -78,7 +78,7 @@ module.exports = router;
 
 async function fetchDataFromPostgres() {
   log.debug('[v3TopAsset] Fetching data from postgres..');
-  const queryResult = await postgresClient.query(
+  const queryResult = await pgQuery(
     `with base as (
         SELECT 'base' as chain,
             t.token_symbol,
@@ -137,10 +137,10 @@ async function fetchDataFromPostgres() {
     limit 1;`,
   );
 
-  const chain = queryResult.rows[0].chain;
-  const tokenSymbol = queryResult.rows[0].token_symbol;
-  const apy = parseFloat(queryResult.rows[0].apy);
-  const apr = parseFloat(queryResult.rows[0].apr);
+  const chain = queryResult.rows?.[0]?.chain;
+  const tokenSymbol = queryResult.rows?.[0]?.token_symbol;
+  const apy = parseFloat(queryResult.rows?.[0]?.apy);
+  const apr = parseFloat(queryResult.rows?.[0]?.apr);
 
   const responseData = {
     timestamp: new Date().toISOString(),

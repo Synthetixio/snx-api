@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { log, postgresClient, getCache, setCache } = require('../../utils');
+const { log, pgQuery, getCache, setCache } = require('../../utils');
 
 const cacheKey = 'v3-tvl';
 
@@ -69,7 +69,7 @@ module.exports = router;
 
 async function fetchDataFromPostgres() {
   log.debug('[v3Tvl] Fetching data from postgres..');
-  const queryResult = await postgresClient.query(
+  const queryResult = await pgQuery(
     `SELECT round(sum(collateral_value), 2) as tvl
       FROM (
               SELECT 'base' as chain,

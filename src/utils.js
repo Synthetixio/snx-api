@@ -14,15 +14,14 @@ const redisClient = redis.createClient({
 });
 redisClient.connect();
 
-const postgres = require('pg').Client;
-const postgresClient = new postgres({
+const postgres = require('pg').Pool;
+const postgresPool = new postgres({
   user: process.env.PG_USER,
   host: process.env.PG_HOST,
   database: process.env.PG_NAME,
   password: process.env.PG_PASSWORD,
   port: process.env.PG_PORT,
 });
-postgresClient.connect();
 
 const transports = [
   new winston.transports.Console({
@@ -95,7 +94,19 @@ module.exports = {
   },
   log,
   redisClient,
-  postgresClient,
+
+  postgresPool,
+
+  pgQuery: async (query, params) => {
+    const postgresClient = await postgresPool.connect();
+    const result = await postgresClient.query(query, params).catch((e) => {
+      console.error(e);
+      return { rows: [] };
+    });
+    postgresClient.release();
+    return result;
+  },
+
   getCache: async (key) => {
     try {
       const cacheValue = JSON.parse(await redisClient.get(key));

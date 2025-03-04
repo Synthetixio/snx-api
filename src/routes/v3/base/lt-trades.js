@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { log, postgresClient, getCache, setCache } = require('../../../utils');
+const { log, pgQuery, getCache, setCache } = require('../../../utils');
 const cacheKeyPrefix = 'base-lt-trades';
 fetchDataFromPostgres();
 const cacheTime =
@@ -27,7 +27,7 @@ setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
  *              type: array
  *              items:
  *                type: object
- *               properties:
+ *                properties:
  *                 id:
  *                   type: string
  *                   example: '0131506856-000048-c2285'
@@ -151,10 +151,7 @@ async function fetchDataFromPostgres(account) {
     order by block_number desc
     limit 100;`;
 
-  const queryResult = await postgresClient.query(
-    query,
-    account ? [account] : [],
-  );
+  const queryResult = await pgQuery(query, account ? [account] : []);
   const responseData = queryResult.rows;
   log.debug('[ltBaseTrade] Setting cache..');
   const cacheKey = account ? `${cacheKeyPrefix}-${account}` : cacheKeyPrefix;

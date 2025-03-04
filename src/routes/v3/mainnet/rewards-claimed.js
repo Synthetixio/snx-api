@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { log, postgresClient, getCache, setCache } = require('../../../utils');
+const { log, pgQuery, getCache, setCache } = require('../../../utils');
 const cacheKeyPrefix = 'mainnet-rewards-claimed';
 
 router.get('/', async (req, res, next) => {
@@ -50,7 +50,7 @@ async function fetchDataFromPostgres(accountId) {
     where account_id = $1
     limit 50;`;
 
-  const queryResult = await postgresClient.query(query, [accountId]);
+  const queryResult = await pgQuery(query, [accountId]);
   const responseData = queryResult.rows;
   log.debug('[MainnetClaimedRewards] Setting cache..');
   const cacheKey = `${cacheKeyPrefix}-${accountId}`;

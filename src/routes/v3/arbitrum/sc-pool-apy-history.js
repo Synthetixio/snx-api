@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { log, postgresClient, getCache, setCache } = require('../../../utils');
+const { log, pgQuery, getCache, setCache } = require('../../../utils');
 
 const cacheKey = 'arbitrum-sc-pool-apy-history';
 
@@ -165,7 +165,7 @@ module.exports = router;
 
 async function fetchDataFromPostgres() {
   log.debug('[v3ArbitrumSCPoolAPYHistory] Fetching data from postgres..');
-  const queryResult = await postgresClient.query(
+  const queryResult = await pgQuery(
     `WITH latest_records AS (
       SELECT
         ts, 

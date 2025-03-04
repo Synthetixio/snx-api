@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { log, postgresClient, getCache, setCache } = require('../../../utils');
+const { log, pgQuery, getCache, setCache } = require('../../../utils');
 
 const cacheKey = 'snax-votes-mainnet';
 
@@ -172,32 +172,32 @@ module.exports = router;
 
 async function fetchDataFromPostgres() {
   log.debug('[v3SnaxVote] Fetching data from postgres..');
-  const queryResultVotesCastedSpartan = await postgresClient.query(
+  const queryResultVotesCastedSpartan = await pgQuery(
     `select *
     from prod_raw_snax_mainnet.spartan_vote_recorded_snax_mainnet;`,
   );
 
-  const queryResultVotesWithdrawnSpartan = await postgresClient.query(
+  const queryResultVotesWithdrawnSpartan = await pgQuery(
     `select *
     from prod_raw_snax_mainnet.spartan_vote_withdrawn_snax_mainnet;`,
   );
 
-  const queryResultVotesCastedAmbassador = await postgresClient.query(
+  const queryResultVotesCastedAmbassador = await pgQuery(
     `select *
     from prod_raw_snax_mainnet.ambassador_vote_recorded_snax_mainnet;`,
   );
 
-  const queryResultVotesWithdrawnAmbassador = await postgresClient.query(
+  const queryResultVotesWithdrawnAmbassador = await pgQuery(
     `select *
     from prod_raw_snax_mainnet.ambassador_vote_withdrawn_snax_mainnet;`,
   );
 
-  const queryResultVotesCastedTreasury = await postgresClient.query(
+  const queryResultVotesCastedTreasury = await pgQuery(
     `select *
     from prod_raw_snax_mainnet.treasury_vote_recorded_snax_mainnet;`,
   );
 
-  const queryResultVotesWithdrawnTreasury = await postgresClient.query(
+  const queryResultVotesWithdrawnTreasury = await pgQuery(
     `select *
     from prod_raw_snax_mainnet.treasury_vote_withdrawn_snax_mainnet;`,
   );

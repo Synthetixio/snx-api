@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { log, postgresClient, getCache, setCache } = require('../../../utils');
+const { log, pgQuery, getCache, setCache } = require('../../../utils');
 
 const cacheKey = 'snax-votes-testnet';
 
@@ -100,12 +100,12 @@ module.exports = router;
 
 async function fetchDataFromPostgres() {
   log.debug('[v3SnaxVote-Testnet] Fetching data from postgres..');
-  const queryResultVotesCasted = await postgresClient.query(
+  const queryResultVotesCasted = await pgQuery(
     `select *
     from prod_raw_snax_testnet.gov_vote_recorded_snax_testnet;`,
   );
 
-  const queryResultVotesWithdrawn = await postgresClient.query(
+  const queryResultVotesWithdrawn = await pgQuery(
     `select *
     from prod_raw_snax_testnet.gov_vote_withdrawn_snax_testnet;`,
   );

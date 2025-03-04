@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { log, postgresClient, getCache, setCache } = require('../../../utils');
+const { log, pgQuery, getCache, setCache } = require('../../../utils');
 
 const cacheKey = 'snx-buyback';
 
@@ -79,7 +79,7 @@ module.exports = router;
 
 async function fetchDataFromPostgres() {
   log.debug('[v3BaseSNXBuyback] Fetching data from postgres..');
-  const queryResult = await postgresClient.query(
+  const queryResult = await pgQuery(
     `select
       ts,
       snx_amount,

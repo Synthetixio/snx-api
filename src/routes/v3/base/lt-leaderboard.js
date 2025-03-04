@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { log, postgresClient, getCache, setCache } = require('../../../utils');
+const { log, pgQuery, getCache, setCache } = require('../../../utils');
 const cacheKey = 'base-lt-leaderboard';
 fetchDataFromPostgres();
 const cacheTime =
@@ -27,7 +27,7 @@ setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
  *              type: array
  *              items:
  *                type: object
- *               properties:
+ *                properties:
  *                 epoch_start:
  *                   type: string
  *                   format: date-time
@@ -84,7 +84,7 @@ router.get('/', async (req, res, next) => {
 module.exports = router;
 async function fetchDataFromPostgres() {
   log.debug('[ltBaseLeaderboard] Fetching data from postgres..');
-  const queryResult = await postgresClient.query(
+  const queryResult = await pgQuery(
     `select
       epoch_start,
       account,

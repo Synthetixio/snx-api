@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { log, postgresClient, getCache, setCache } = require('../../../utils');
+const { log, pgQuery, getCache, setCache } = require('../../../utils');
 
 const cacheKey = 'sc-pool-apy';
 
@@ -162,7 +162,7 @@ module.exports = router;
 
 async function fetchDataFromPostgres() {
   log.debug('[v3BaseSCPoolAPY] Fetching data from postgres..');
-  const queryResult = await postgresClient.query(
+  const queryResult = await pgQuery(
     `WITH latest_records AS (
       SELECT DISTINCT ON (collateral_type) 
         ts, 
@@ -203,38 +203,71 @@ async function fetchDataFromPostgres() {
     ORDER BY ts DESC;`,
   );
 
-  const {
-    ts,
-    pool_id,
-    collateral_type,
-    collateral_value,
-    debt,
-    hourly_issuance,
-    hourly_pnl,
-    cumulative_pnl,
-    cumulative_issuance,
-    rewards_usd,
-    hourly_pnl_pct,
-    hourly_rewards_pct,
-    apr_24h,
-    apy_24h,
-    apr_7d,
-    apy_7d,
-    apr_28d,
-    apy_28d,
-    apr_24h_pnl,
-    apy_24h_pnl,
-    apr_7d_pnl,
-    apy_7d_pnl,
-    apr_28d_pnl,
-    apy_28d_pnl,
-    apr_24h_rewards,
-    apy_24h_rewards,
-    apr_7d_rewards,
-    apy_7d_rewards,
-    apr_28d_rewards,
-    apy_28d_rewards,
-  } = queryResult.rows[0];
+  const [
+    {
+      ts,
+      pool_id,
+      collateral_type,
+      collateral_value,
+      debt,
+      hourly_issuance,
+      hourly_pnl,
+      cumulative_pnl,
+      cumulative_issuance,
+      rewards_usd,
+      hourly_pnl_pct,
+      hourly_rewards_pct,
+      apr_24h,
+      apy_24h,
+      apr_7d,
+      apy_7d,
+      apr_28d,
+      apy_28d,
+      apr_24h_pnl,
+      apy_24h_pnl,
+      apr_7d_pnl,
+      apy_7d_pnl,
+      apr_28d_pnl,
+      apy_28d_pnl,
+      apr_24h_rewards,
+      apy_24h_rewards,
+      apr_7d_rewards,
+      apy_7d_rewards,
+      apr_28d_rewards,
+      apy_28d_rewards,
+    } = {
+      ts: null,
+      pool_id: null,
+      collateral_type: null,
+      collateral_value: null,
+      debt: null,
+      hourly_issuance: null,
+      hourly_pnl: null,
+      cumulative_pnl: null,
+      cumulative_issuance: null,
+      rewards_usd: null,
+      hourly_pnl_pct: null,
+      hourly_rewards_pct: null,
+      apr_24h: null,
+      apy_24h: null,
+      apr_7d: null,
+      apy_7d: null,
+      apr_28d: null,
+      apy_28d: null,
+      apr_24h_pnl: null,
+      apy_24h_pnl: null,
+      apr_7d_pnl: null,
+      apy_7d_pnl: null,
+      apr_28d_pnl: null,
+      apy_28d_pnl: null,
+      apr_24h_rewards: null,
+      apy_24h_rewards: null,
+      apr_7d_rewards: null,
+      apy_7d_rewards: null,
+      apr_28d_rewards: null,
+      apy_28d_rewards: null,
+    },
+  ] = queryResult.rows;
 
   const timestamp = ts;
   const poolId = pool_id;
