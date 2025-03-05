@@ -5,7 +5,7 @@ const basicAuth = require('express-basic-auth');
 const favicon = require('serve-favicon');
 const path = require('path');
 
-const swaggerDocs = require('./swagger.js');
+const swaggerDocs = require('./swagger');
 const { redisClient, postgresPool, log } = require('./utils');
 
 redisClient.on('error', (err) => log.error(`[Redis] Client error: ${err}`));
@@ -48,126 +48,94 @@ redisClient.on('ready', () => {
 
   log.debug('[Express] Setting up routes..');
 
-  app.get('/', (req, res) => {
-    res.redirect('/docs/');
-  });
-
-  const statusRouter = require('./routes/status');
-  app.use('/status', statusRouter);
-
-  const healthRouter = require('./routes/health');
+  app.get('/', (req, res) => res.redirect('/docs/'));
+  app.use('/status', require('./routes/status'));
   app.use(
     '/health',
     basicAuth({
       users: { monitor: process.env.HEALTH_ENDPOINT_PASSWORD },
       challenge: true,
     }),
-    healthRouter,
+    require('./routes/health'),
   );
-
-  const totalSupplyRouter = require('./routes/total-supply').router;
-  app.use('/total-supply', totalSupplyRouter);
-
-  const circulatingSupplyRouter = require('./routes/circulating-supply').router;
-  app.use('/circulating-supply', circulatingSupplyRouter);
-
-  const synthetixEscrowVestedBalanceRouter =
-    require('./routes/SynthetixEscrow/vested-balance').router;
+  app.use('/total-supply', require('./routes/total-supply').router);
+  app.use('/circulating-supply', require('./routes/circulating-supply').router);
   app.use(
     '/synthetixescrow/vested-balance',
-    synthetixEscrowVestedBalanceRouter,
+    require('./routes/SynthetixEscrow/vested-balance').router,
   );
-
-  const rewardEscrowV2EscrowedBalanceRouter =
-    require('./routes/RewardEscrowV2/escrowed-balance').router;
   app.use(
     '/rewardescrowv2/escrowed-balance',
-    rewardEscrowV2EscrowedBalanceRouter,
+    require('./routes/RewardEscrowV2/escrowed-balance').router,
   );
 
-  const rewardEscrowEscrowedBalanceRouter =
-    require('./routes/RewardEscrow/escrowed-balance').router;
-  app.use('/rewardescrow/escrowed-balance', rewardEscrowEscrowedBalanceRouter);
-
-  const liquidatorRewardsBalanceRouter =
-    require('./routes/LiquidatorRewards/balance').router;
-  app.use('/liquidatorrewards/balance', liquidatorRewardsBalanceRouter);
-
-  const synthetixBridgeEscrowBalanceRouter =
-    require('./routes/SynthetixBridgeEscrow/balance').router;
-  app.use('/synthetixbridgeescrow/balance', synthetixBridgeEscrowBalanceRouter);
+  app.use(
+    '/rewardescrow/escrowed-balance',
+    require('./routes/RewardEscrow/escrowed-balance').router,
+  );
+  app.use(
+    '/liquidatorrewards/balance',
+    require('./routes/LiquidatorRewards/balance').router,
+  );
+  app.use(
+    '/synthetixbridgeescrow/balance',
+    require('./routes/SynthetixBridgeEscrow/balance').router,
+  );
 
   postgresPool.on('error', (err) =>
     log.error(`[Postgres] Client error: ${err.stack}`),
   );
   log.debug('[Express] Setting up routes related to postgres..');
 
-  const v3BaseSCPoolAPYRouter = require('./routes/v3/base/sc-pool-apy.js');
-  app.use('/v3/base/sc-pool-apy', v3BaseSCPoolAPYRouter);
+  app.use('/v3/base/sc-pool-apy', require('./routes/v3/base/sc-pool-apy'));
+  app.use(
+    '/v3/base/sc-pool-apy-history',
+    require('./routes/v3/base/sc-pool-apy-history'),
+  );
+  app.use('/v3/base/snx-buyback', (_, res) => res.json([]));
+  app.use(
+    '/v3/base/lt-leaderboard',
+    require('./routes/v3/base/sc-pool-apy-all.js'),
+  );
+  app.use('/v3/base/lt-trades', require('./routes/v3/base/lt-trades'));
 
-  const v3BaseSCPoolAPYHistoryRouter = require('./routes/v3/base/sc-pool-apy-history.js');
-  app.use('/v3/base/sc-pool-apy-history', v3BaseSCPoolAPYHistoryRouter);
-
-  const v3BaseSNXBuybackRouter = require('./routes/v3/base/snx-buyback.js');
-  app.use('/v3/base/snx-buyback', v3BaseSNXBuybackRouter);
-
-  const v3BaseLTLeaderboardRouter = require('./routes/v3/base/lt-leaderboard.js');
-  app.use('/v3/base/lt-leaderboard', v3BaseLTLeaderboardRouter);
-
-  const v3BaseLTTradesRouter = require('./routes/v3/base/lt-trades.js');
-  app.use('/v3/base/lt-trades', v3BaseLTTradesRouter);
-
-  const v3BaseRewardsClaimedRouter = require('./routes/v3/base/rewards-claimed.js');
-  app.use('/v3/base/rewards-claimed', v3BaseRewardsClaimedRouter);
-
-  const v3ArbitrumSCPoolAPYRouter = require('./routes/v3/arbitrum/sc-pool-apy.js');
-  app.use('/v3/arbitrum/sc-pool-apy', v3ArbitrumSCPoolAPYRouter);
-
-  const v3ArbitrumSCPoolAPYHistoryRouter = require('./routes/v3/arbitrum/sc-pool-apy-history.js');
-  app.use('/v3/arbitrum/sc-pool-apy-history', v3ArbitrumSCPoolAPYHistoryRouter);
-
-  const v3ArbitrumSCPoolAPYAllRouter = require('./routes/v3/arbitrum/sc-pool-apy-all.js');
-  app.use('/v3/arbitrum/sc-pool-apy-all', v3ArbitrumSCPoolAPYAllRouter);
-
-  const v3BaseSCPoolAPYAllRouter = require('./routes/v3/base/sc-pool-apy-all.js');
-  app.use('/v3/base/sc-pool-apy-all', v3BaseSCPoolAPYAllRouter);
-
-  const v3MainnetScPoolAPYAllRouter = require('./routes/v3/mainnet/sc-pool-apy-all.js');
-  app.use('/v3/mainnet/sc-pool-apy-all', v3MainnetScPoolAPYAllRouter);
-
-  const v3MainnetRewardsClaimedRouter = require('./routes/v3/mainnet/rewards-claimed.js');
-  app.use('/v3/mainnet/rewards-claimed', v3MainnetRewardsClaimedRouter);
-
-  const v3OptimismLTLeaderboardRouter = require('./routes/v3/optimism/lt-leaderboard.js');
-  app.use('/v3/optimism/lt-leaderboard', v3OptimismLTLeaderboardRouter);
-
-  const v3OptimismLtTradesRouter = require('./routes/v3/optimism/lt-trades.js');
-  app.use('/v3/optimism/lt-trades', v3OptimismLtTradesRouter);
-
-  //  const v3SnaxTestnetVotesRouter = require('./routes/v3/snax-testnet/votes.js');
-  //  app.use('/v3/snax-testnet/votes', v3SnaxTestnetVotesRouter);
-
-  //  const v3SnaxVotesRouter = require('./routes/v3/snax/votes.js');
-  //  app.use('/v3/snax/votes', v3SnaxVotesRouter);
-
-  const v3TvlRouter = require('./routes/v3/tvl.js');
-  app.use('/v3/tvl', v3TvlRouter);
-
-  const v3TopAsset = require('./routes/v3/top-asset.js');
-  app.use('/v3/top-asset', v3TopAsset);
-
-  // stats
-  const statsPerpsVolumeRouter = require('./routes/stats/perps-volume.js');
-  app.use('/stats/perps-volume', statsPerpsVolumeRouter);
-
-  // app.use(function errorHandler(err, req, res, next) {
-  //   console.error(err);
-  //   if (res.headersSent) {
-  //     return next(err);
-  //   }
-  //   res.status(500);
-  //   res.json({ error: err.message });
-  // });
+  app.use(
+    '/v3/base/rewards-claimed',
+    require('./routes/v3/base/rewards-claimed'),
+  );
+  app.use(
+    '/v3/arbitrum/sc-pool-apy',
+    require('./routes/v3/arbitrum/sc-pool-apy'),
+  );
+  app.use(
+    '/v3/arbitrum/sc-pool-apy-history',
+    require('./routes/v3/arbitrum/sc-pool-apy-history'),
+  );
+  app.use(
+    '/v3/arbitrum/sc-pool-apy-all',
+    require('./routes/v3/arbitrum/sc-pool-apy-all'),
+  );
+  app.use(
+    '/v3/base/sc-pool-apy-all',
+    require('./routes/v3/base/sc-pool-apy-all'),
+  );
+  app.use(
+    '/v3/mainnet/sc-pool-apy-all',
+    require('./routes/v3/mainnet/sc-pool-apy-all'),
+  );
+  app.use(
+    '/v3/mainnet/rewards-claimed',
+    require('./routes/v3/mainnet/rewards-claimed'),
+  );
+  app.use(
+    '/v3/optimism/lt-leaderboard',
+    require('./routes/v3/optimism/lt-leaderboard'),
+  );
+  app.use('/v3/optimism/lt-trades', require('./routes/v3/optimism/lt-trades'));
+  app.use('/v3/tvl', require('./routes/v3/tvl'));
+  app.use('/v3/top-asset', require('./routes/v3/top-asset'));
+  app.use('/stats/perps-volume', require('./routes/stats/perps-volume'));
+  app.use('/v3/tvl420', require('./routes/v3/tvl420'));
 
   log.debug('[Express] Starting server..');
   const port =
