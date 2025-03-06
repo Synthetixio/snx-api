@@ -102,7 +102,7 @@ module.exports = {
     log.debug(`Executing query: ${query}, params: ${params}`);
     const result = await postgresClient.query(query, params).catch((e) => {
       console.error(e);
-      return { rows: [] };
+      return undefined;
     });
     postgresClient.release();
     return result;

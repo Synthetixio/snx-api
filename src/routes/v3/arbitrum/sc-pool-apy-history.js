@@ -198,6 +198,9 @@ async function fetchDataFromPostgres() {
     ORDER BY ts DESC
     LIMIT 100000;`,
   );
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
 
   const responseData = queryResult.rows.map((item) => ({
     timestamp: item.ts,

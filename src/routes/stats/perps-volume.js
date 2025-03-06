@@ -107,6 +107,9 @@ async function fetchDataFromPostgres() {
     FROM volume
     GROUP BY label;`,
   );
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
 
   const volume24h = queryResult.rows.find(
     (row) => row.label === 'volume_24h',

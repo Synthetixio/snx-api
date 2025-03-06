@@ -78,8 +78,10 @@ async function fetchDataFromPostgres(accountId) {
   FROM prod_eth_mainnet.fct_core_rewards_claimed_eth_mainnet
   WHERE account_id = $1;
   `;
-
   const queryResult = await pgQuery(query, [accountId]);
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
   const totalAmountUsd = queryResult.rows[0].total_amount_usd;
 
   log.debug('[MainnetClaimedRewards] Setting cache..');

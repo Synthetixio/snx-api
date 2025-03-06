@@ -80,10 +80,11 @@ async function fetchDataFromPostgres() {
       cumulative_usd_amount
     from prod_base_mainnet.fct_buyback_daily_base_mainnet;`,
   );
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
 
-  const data = queryResult.rows.map(parseAndRenameKeys);
-
-  const responseData = data;
+  const responseData = queryResult.rows.map(parseAndRenameKeys);
   log.debug('[v3BaseSNXBuyback] Setting cache..');
   await setCache(cacheKey, responseData, 300);
   return responseData;
