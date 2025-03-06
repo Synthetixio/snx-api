@@ -134,7 +134,7 @@ redisClient.on('ready', () => {
   app.use('/v3/optimism/lt-trades', require('./routes/v3/optimism/lt-trades'));
   app.use('/v3/tvl', require('./routes/v3/tvl'));
   app.use('/v3/top-asset', require('./routes/v3/top-asset'));
-  //app.use('/stats/perps-volume', require('./routes/stats/perps-volume'));
+  app.use('/stats/perps-volume', require('./routes/stats/perps-volume'));
   app.use('/v3/tvl420', require('./routes/v3/tvl420'));
 
   log.debug('[Express] Starting server..');
