@@ -232,7 +232,7 @@ async function circulatingSupplyHandler(req, res, next) {
         },
       };
       log.debug('Setting cache..');
-      await setCache(cacheKey, responseData, 60);
+      await setCache(cacheKey, responseData, 300);
 
       res.json(responseData);
     }

@@ -1,19 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { log, pgQuery, getCache, setCache } = require('../../../utils');
+
 const cacheKeyPrefix = 'base-lt-trades';
-fetchDataFromPostgres();
-const cacheTime =
-  ((process.env.CACHE_TIME =
-    typeof process.env.CACHE_TIME === 'string'
-      ? parseInt(process.env.CACHE_TIME)
-      : process.env.CACHE_TIME) -
-    30) *
-  1000;
-setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
+
+setInterval(fetchDataFromPostgres, 300_000);
+
 /**
  * @openapi
- * /v3/Base/lt-trades:
+ * /v3/base/lt-trades:
  *  get:
  *     tags:
  *     - v3
@@ -155,6 +150,6 @@ async function fetchDataFromPostgres(account) {
   const responseData = queryResult.rows;
   log.debug('[ltBaseTrade] Setting cache..');
   const cacheKey = account ? `${cacheKeyPrefix}-${account}` : cacheKeyPrefix;
-  await setCache(cacheKey, responseData, 60);
+  await setCache(cacheKey, responseData, 300);
   return responseData;
 }

@@ -7,6 +7,8 @@ const cacheKeyPrefix = 'mainnet-reward-claimed';
  * @openapi
  * /v3/mainnet/rewards-claimed:
  *   get:
+ *     tags:
+ *     - v3
  *     summary: Fetch sum of usd value of claimed rewards for a given account ID.
  *     description: Checks the cache first, and if not found, fetches claimed rewards data from Postgres for the given account ID.
  *     parameters:
@@ -82,6 +84,6 @@ async function fetchDataFromPostgres(accountId) {
 
   log.debug('[MainnetClaimedRewards] Setting cache..');
   const cacheKey = `${cacheKeyPrefix}-${accountId}`;
-  await setCache(cacheKey, totalAmountUsd, 60);
+  await setCache(cacheKey, totalAmountUsd, 300);
   return totalAmountUsd;
 }
