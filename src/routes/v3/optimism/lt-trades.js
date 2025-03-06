@@ -1,19 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const { log, pgQuery, getCache, setCache } = require('../../../utils');
+
 const cacheKeyPrefix = 'optimism-lt-trades';
-fetchDataFromPostgres();
-const cacheTime =
-  ((process.env.CACHE_TIME =
-    typeof process.env.CACHE_TIME === 'string'
-      ? parseInt(process.env.CACHE_TIME)
-      : process.env.CACHE_TIME) -
-    30) *
-  1000;
-setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
+
+setInterval(fetchDataFromPostgres, 300_000);
+
 /**
  * @openapi
- * /v3/Optimism/lt-trades:
+ * /v3/optimism/lt-trades:
  *  get:
  *     tags:
  *     - v3
@@ -155,6 +150,6 @@ async function fetchDataFromPostgres(account) {
   const responseData = queryResult.rows;
   log.debug('[ltOptimismTrade] Setting cache..');
   const cacheKey = account ? `${cacheKeyPrefix}-${account}` : cacheKeyPrefix;
-  await setCache(cacheKey, responseData, 60);
+  await setCache(cacheKey, responseData, 300);
   return responseData;
 }

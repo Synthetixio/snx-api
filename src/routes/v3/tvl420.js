@@ -2,8 +2,17 @@ const express = require('express');
 const router = express.Router();
 const { log, pgQuery, getCache, setCache } = require('../../utils');
 
-const networks = ['cross'];
-const spans = ['hourly', 'daily', 'weekly', 'monthly'];
+const networks = [
+  'cross',
+  // 'ethereum',
+  // 'optimism',
+];
+const spans = [
+  'hourly',
+  //  'daily',
+  //  'weekly',
+  //  'monthly',
+];
 
 function prefetch() {
   for (const network of networks) {
@@ -12,12 +21,14 @@ function prefetch() {
     }
   }
 }
-setInterval(prefetch, 60_000);
+setInterval(prefetch, 300_000);
 
 /**
  * @openapi
  * /v3/tvl420:
  *   get:
+ *     tags:
+ *     - v3
  *     summary: Retrieve TVL data for a specific network and time span.
  *     description: Fetches Total Value Locked (TVL) data from the cache or PostgreSQL for the specified blockchain network and time span.
  *     parameters:
@@ -207,6 +218,6 @@ async function fetchDataFromPostgres(network, span) {
   const queryResult = await pgQuery(query, []);
   const responseData = queryResult.rows;
   log.debug(`[${cacheKey}] Setting cache..`);
-  await setCache(cacheKey, responseData, 600_000);
+  await setCache(cacheKey, responseData, 600);
   return responseData;
 }

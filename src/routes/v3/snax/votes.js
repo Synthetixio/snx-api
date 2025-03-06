@@ -4,15 +4,8 @@ const { log, pgQuery, getCache, setCache } = require('../../../utils');
 
 const cacheKey = 'snax-votes-mainnet';
 
-fetchDataFromPostgres();
-const cacheTime =
-  ((process.env.CACHE_TIME =
-    typeof process.env.CACHE_TIME === 'string'
-      ? parseInt(process.env.CACHE_TIME)
-      : process.env.CACHE_TIME) -
-    30) *
-  1000;
-setInterval(fetchDataFromPostgres, cacheTime < 30000 ? 30000 : cacheTime);
+setInterval(fetchDataFromPostgres, 300_000);
+
 /**
 @openapi
 * /v3/snax/votes:
@@ -215,7 +208,7 @@ async function fetchDataFromPostgres() {
   };
 
   log.debug('[v3SnaxVote] Setting cache..');
-  await setCache(cacheKey, responseData, 60);
+  await setCache(cacheKey, responseData, 300);
   return responseData;
 }
 
