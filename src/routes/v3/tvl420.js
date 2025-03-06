@@ -81,6 +81,36 @@ setInterval(prefetch, 60_000);
  *                   type: string
  *                   example: Internal server error.
  */
+router.get('/', async (req, res, next) => {
+  const { network, span } = req.query;
+  if (
+    !(
+      ['cross', 'ethereum', 'optimism'].includes(network) &&
+      ['hourly', 'daily', 'weekly', 'monthly'].includes(span)
+    )
+  ) {
+    return res.status(400).json({
+      error: 'Invalid network or span.',
+    });
+  }
+  const cacheKey = `tvl420-${network}-${span}`;
+
+  try {
+    log.debug(`[${cacheKey}] Checking cache..`);
+    const cachedResponse = await getCache(cacheKey);
+    if (cachedResponse) {
+      log.debug(`[${cacheKey}] Cache found..`);
+      res.json(cachedResponse);
+    } else {
+      log.debug(`[${cacheKey}] Cache not found, executing..`);
+      const responseData = await fetchDataFromPostgres(network, span);
+      res.json(responseData);
+    }
+  } catch (error) {
+    log.error(`[${cacheKey}] Error: ${error.message}`);
+    next(error);
+  }
+});
 module.exports = router;
 
 async function fetchDataFromPostgres(network, span) {
