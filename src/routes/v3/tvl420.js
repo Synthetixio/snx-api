@@ -10,8 +10,8 @@ const networks = [
   // 'optimism',
 ];
 const spans = [
-  'hourly',
-  //  'daily',
+  //  'hourly',
+  'daily',
   //  'weekly',
   //  'monthly',
 ];
@@ -24,7 +24,7 @@ function prefetch() {
   }
 }
 setInterval(prefetch, 300_000);
-
+prefetch();
 /**
  * @openapi
  * /v3/tvl420:
@@ -132,14 +132,14 @@ async function fetchDataFromPostgres(network, span) {
   let query;
   switch (true) {
     case network === 'cross' && span === 'hourly': {
-      query = `SELECT t.ts, t.hourly_cumulative_value as value
+      query = `SELECT t.ts, t.hourly_cumulative_amount as value
        FROM prod_cross_chains.fct_pol_stats_hourly_cross_chains t
        WHERE t.ts >= NOW() - INTERVAL '7 days'
        LIMIT 200`;
       break;
     }
     case network === 'cross' && span === 'daily': {
-      query = `SELECT t.ts, t.daily_cumulative_value as value
+      query = `SELECT t.ts, t.daily_cumulative_amount as value
        FROM prod_cross_chains.fct_pol_stats_daily_cross_chains t
        WHERE t.ts >= NOW() - INTERVAL '2 months'
        LIMIT 100`;
@@ -153,21 +153,21 @@ async function fetchDataFromPostgres(network, span) {
       break;
     }
     case network === 'cross' && span === 'monthly': {
-      query = `SELECT t.ts, t.monthly_cumulative_value as value
+      query = `SELECT t.ts, t.monthly_cumulative_amount as value
        FROM prod_cross_chains.fct_pol_stats_monthly_cross_chains t
        WHERE t.ts >= NOW() - INTERVAL '5 years'
        LIMIT 100`;
       break;
     }
     case network === 'ethereum' && span === 'hourly': {
-      query = `SELECT t.ts, t.hourly_cumulative_value as value
+      query = `SELECT t.ts, t.hourly_cumulative_amount as value
        FROM prod_eth_mainnet.fct_pol_stats_hourly_eth_mainnet t
        WHERE t.ts >= NOW() - INTERVAL '7 days'
        LIMIT 200`;
       break;
     }
     case network === 'ethereum' && span === 'daily': {
-      query = `SELECT t.ts, t.daily_cumulative_value as value
+      query = `SELECT t.ts, t.daily_cumulative_amount as value
        FROM prod_eth_mainnet.fct_pol_stats_daily_eth_mainnet t
        WHERE t.ts >= NOW() - INTERVAL '2 months'
        LIMIT 100`;
@@ -181,21 +181,21 @@ async function fetchDataFromPostgres(network, span) {
       break;
     }
     case network === 'ethereum' && span === 'monthly': {
-      query = `SELECT t.ts, t.monthly_cumulative_value as value
+      query = `SELECT t.ts, t.monthly_cumulative_amount as value
        FROM prod_eth_mainnet.fct_pol_stats_monthly_eth_mainnet t
        WHERE t.ts >= NOW() - INTERVAL '5 years'
        LIMIT 100`;
       break;
     }
     case network === 'optimism' && span === 'hourly': {
-      query = `SELECT t.ts, t.hourly_cumulative_value as value
+      query = `SELECT t.ts, t.hourly_cumulative_amount as value
        FROM prod_optimism_mainnet.fct_pol_stats_hourly_optimism_mainnet t
        WHERE t.ts >= NOW() - INTERVAL '7 days'
        LIMIT 200`;
       break;
     }
     case network === 'optimism' && span === 'daily': {
-      query = `SELECT t.ts, t.daily_cumulative_value as value
+      query = `SELECT t.ts, t.daily_cumulative_amount as value
        FROM prod_optimism_mainnet.fct_pol_stats_daily_optimism_mainnet t
        WHERE t.ts >= NOW() - INTERVAL '2 months'
        LIMIT 100`;
@@ -209,7 +209,7 @@ async function fetchDataFromPostgres(network, span) {
       break;
     }
     case network === 'optimism' && span === 'monthly': {
-      query = `SELECT t.ts, t.monthly_cumulative_value as value
+      query = `SELECT t.ts, t.monthly_cumulative_amount as value
        FROM prod_optimism_mainnet.fct_pol_stats_monthly_optimism_mainnet t
        WHERE t.ts >= NOW() - INTERVAL '5 years'
        LIMIT 100`;
