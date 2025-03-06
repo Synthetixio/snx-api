@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { log, pgQuery, getCache, setCache } = require('../../utils');
 
+const cacheKeyPrefix = 'tvl420-v2';
+
 const networks = [
   'cross',
   // 'ethereum',
@@ -104,7 +106,7 @@ router.get('/', async (req, res, next) => {
       error: 'Invalid network or span.',
     });
   }
-  const cacheKey = `tvl420-${network}-${span}`;
+  const cacheKey = `${cacheKeyPrefix}-${network}-${span}`;
 
   try {
     log.debug(`[${cacheKey}] Checking cache..`);
@@ -125,7 +127,7 @@ router.get('/', async (req, res, next) => {
 module.exports = router;
 
 async function fetchDataFromPostgres(network, span) {
-  const cacheKey = `tvl420-${network}-${span}`;
+  const cacheKey = `${cacheKeyPrefix}-${network}-${span}`;
   log.debug(`[${cacheKey}] Fetching data from postgres..`);
   let query;
   switch (true) {
