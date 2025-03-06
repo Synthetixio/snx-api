@@ -79,6 +79,9 @@ async function fetchDataFromPostgres(accountId) {
   `;
 
   const queryResult = await pgQuery(query, [accountId]);
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
   const totalAmountUsd = queryResult.rows[0].total_amount_usd;
 
   log.debug('[BaseClaimedRewards] Setting cache..');

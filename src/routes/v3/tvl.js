@@ -96,6 +96,9 @@ async function fetchDataFromPostgres() {
           ) sub
       WHERE rn = 1;`,
   );
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
 
   const tvl = queryResult.rows[0].tvl;
   const tvlUsd = parseFloat(tvl);

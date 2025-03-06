@@ -93,6 +93,9 @@ async function fetchDataFromPostgres() {
     WHERE epoch_start > date '2025-01-14'
     ;`,
   );
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
   const responseData = queryResult.rows;
   log.debug('[ltOptimismLeaderboard] Setting cache..');
   await setCache(cacheKey, responseData, 300);

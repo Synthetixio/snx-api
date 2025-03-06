@@ -194,6 +194,9 @@ async function fetchDataFromPostgres() {
     SELECT * FROM latest_records
     ORDER BY ts DESC;`,
   );
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
 
   const [
     {

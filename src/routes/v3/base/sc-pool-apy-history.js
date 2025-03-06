@@ -197,6 +197,9 @@ async function fetchDataFromPostgres() {
     ORDER BY ts DESC
     LIMIT 100000;`,
   );
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
 
   const dailyResults = queryResult.rows
     .filter((_, index) => index % 24 === 0)

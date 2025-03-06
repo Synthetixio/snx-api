@@ -215,7 +215,11 @@ async function fetchDataFromPostgres(network, span) {
     }
   }
 
-  const queryResult = await pgQuery(query, []);
+  const queryResult = await pgQuery(query);
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
+
   const responseData = queryResult.rows;
   log.debug(`[${cacheKey}] Setting cache..`);
   await setCache(cacheKey, responseData, 600);

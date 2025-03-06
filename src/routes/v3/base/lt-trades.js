@@ -146,7 +146,10 @@ async function fetchDataFromPostgres(account) {
     order by block_number desc
     limit 100;`;
 
-  const queryResult = await pgQuery(query, account ? [account] : []);
+  const queryResult = await pgQuery(query, account ? [account] : undefined);
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
   const responseData = queryResult.rows;
   log.debug('[ltBaseTrade] Setting cache..');
   const cacheKey = account ? `${cacheKeyPrefix}-${account}` : cacheKeyPrefix;

@@ -128,6 +128,9 @@ async function fetchDataFromPostgres() {
     order by apy_7d desc
     limit 1;`,
   );
+  if (!queryResult) {
+    return { error: 'Query error.' };
+  }
 
   const chain = queryResult.rows?.[0]?.chain;
   const tokenSymbol = queryResult.rows?.[0]?.token_symbol;
