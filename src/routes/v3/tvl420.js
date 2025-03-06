@@ -27,9 +27,10 @@ setInterval(prefetch, 60_000);
  *         schema:
  *           type: string
  *           enum:
+ *             - cross
  *             - ethereum
  *             - optimism
- *         description: Name of the blockchain network (e.g., ethereum or optimism).
+ *         description: Name of the blockchain network (e.g., cross, ethereum, or optimism).
  *       - in: query
  *         name: span
  *         required: true
@@ -80,36 +81,6 @@ setInterval(prefetch, 60_000);
  *                   type: string
  *                   example: Internal server error.
  */
-router.get('/', async (req, res, next) => {
-  const { network, span } = req.query;
-  if (
-    !(
-      ['ethereum', 'optimism'].includes(network) &&
-      ['hourly', 'daily', 'weekly', 'monthly'].includes(span)
-    )
-  ) {
-    return res.status(400).json({
-      error: 'Invalid network or span.',
-    });
-  }
-  const cacheKey = `tvl420-${network}-${span}`;
-
-  try {
-    log.debug(`[${cacheKey}] Checking cache..`);
-    const cachedResponse = await getCache(cacheKey);
-    if (cachedResponse) {
-      log.debug(`[${cacheKey}] Cache found..`);
-      res.json(cachedResponse);
-    } else {
-      log.debug(`[${cacheKey}] Cache not found, executing..`);
-      const responseData = await fetchDataFromPostgres(network, span);
-      res.json(responseData);
-    }
-  } catch (error) {
-    log.error(`[${cacheKey}] Error: ${error.message}`);
-    next(error);
-  }
-});
 module.exports = router;
 
 async function fetchDataFromPostgres(network, span) {
