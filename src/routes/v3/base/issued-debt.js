@@ -1,26 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const { log, pgQuery, getCache, setCache } = require('../../../utils');
-const cacheKeyPrefix = 'base-rewards-claimed';
+const cacheKeyPrefix = 'base-issued-debt';
 
 /**
  * @openapi
- * /v3/base/rewards-claimed:
+ * /v3/base/issued-debt:
  *   get:
  *     tags:
  *     - v3
- *     summary: Fetch sum of usd value of claimed rewards for a given account ID for each collateral.
- *     description: Checks the cache first, and if not found, fetches claimed rewards data from Postgres for the given account ID.
+ *     summary: Fetch sum of usd value of issued debt each collateral.
+ *     description: Checks the cache first, and if not found, fetches issued debt data from Postgres for the given account ID.
  *     parameters:
  *       - in: query
  *         name: accountId
  *         required: true
  *         schema:
  *           type: string
- *         description: The account ID to fetch total usd value of claimed rewards for. Must be a positive integer.
+ *         description: The account ID to fetch the issued debt for.
  *     responses:
  *       200:
- *         description: Successfully fetched claimed rewards.
+ *         description: Successfully fetched issued debt.
  *         content:
  *          application/json:
  *            schema:
@@ -31,7 +31,7 @@ const cacheKeyPrefix = 'base-rewards-claimed';
  *                 collateral_type:
  *                   type: string
  *                   example: '0x..'
- *                 total_amount_usd:
+ *                 issuance:
  *                   type: number
  *                   example: 1
  *       400:
@@ -71,21 +71,22 @@ router.get('/', async (req, res, next) => {
       res.json(responseData);
     }
   } catch (error) {
-    log.error(`[BaseClaimedRewards] Error: ${error.message}`);
+    log.error(`[BaseIssuedDebt] Error: ${error.message}`);
     next(error);
   }
 });
 module.exports = router;
 async function fetchDataFromPostgres(accountId) {
-  log.debug('[BaseClaimedRewards] Fetching data from postgres..');
+  log.debug('[BaseIssuedDebt] Fetching data from postgres..');
 
   const query = `
   SELECT
       collateral_type,
-      SUM(CAST(amount_usd AS DECIMAL)) AS total_amount_usd
-  FROM prod_base_mainnet.fct_core_rewards_claimed_base_mainnet
+      SUM(CAST(amount AS DECIMAL)) AS issuance
+  FROM prod_base_mainnet.fct_pool_issuance_base_mainnet
   WHERE account_id = $1
-  group by collateral_type;
+      AND pool_id = 1
+  GROUP BY collateral_type
   `;
 
   const queryResult = await pgQuery(query, [accountId]);
@@ -94,7 +95,7 @@ async function fetchDataFromPostgres(accountId) {
   }
   const responseData = queryResult.rows;
 
-  log.debug('[BaseClaimedRewards] Setting cache..');
+  log.debug('[BaseIssuedDebt] Setting cache..');
   const cacheKey = `${cacheKeyPrefix}-${accountId}`;
   await setCache(cacheKey, responseData, 300);
   return responseData;

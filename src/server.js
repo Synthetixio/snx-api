@@ -103,6 +103,7 @@ redisClient.on('ready', () => {
     '/v3/base/rewards-claimed',
     require('./routes/v3/base/rewards-claimed'),
   );
+  app.use('/v3/base/issued-debt', require('./routes/v3/base/issued-debt'));
   app.use(
     '/v3/arbitrum/sc-pool-apy',
     require('./routes/v3/arbitrum/sc-pool-apy'),
@@ -126,6 +127,10 @@ redisClient.on('ready', () => {
   app.use(
     '/v3/mainnet/rewards-claimed',
     require('./routes/v3/mainnet/rewards-claimed'),
+  );
+  app.use(
+    '/v3/mainnet/issued-debt',
+    require('./routes/v3/mainnet/issued-debt'),
   );
   app.use(
     '/v3/optimism/lt-leaderboard',

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { log, pgQuery, getCache, setCache } = require('../../../utils');
-const cacheKeyPrefix = 'mainnet-reward-claimed';
+const cacheKeyPrefix = 'mainnet-rewards-claimed';
 
 /**
  * @openapi
@@ -9,7 +9,7 @@ const cacheKeyPrefix = 'mainnet-reward-claimed';
  *   get:
  *     tags:
  *     - v3
- *     summary: Fetch sum of usd value of claimed rewards for a given account ID.
+ *     summary: Fetch sum of usd value of claimed rewards for a given account ID for each collateral.
  *     description: Checks the cache first, and if not found, fetches claimed rewards data from Postgres for the given account ID.
  *     parameters:
  *       - in: query
@@ -17,15 +17,23 @@ const cacheKeyPrefix = 'mainnet-reward-claimed';
  *         required: true
  *         schema:
  *           type: string
- *         description: The account ID to fetch rewards for. Must be a positive integer.
+ *         description: The account ID to fetch total usd value of claimed rewards for. Must be a positive integer.
  *     responses:
  *       200:
  *         description: Successfully fetched claimed rewards.
  *         content:
- *           application/json:
- *             schema:
- *               type: number
- *               description: Sum of all claimed rewards usd value
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                type: object
+ *                properties:
+ *                 collateral_type:
+ *                   type: string
+ *                   example: '0x..'
+ *                 total_amount_usd:
+ *                   type: number
+ *                   example: 1
  *       400:
  *         description: Invalid accountId provided.
  *         content:
@@ -74,18 +82,21 @@ async function fetchDataFromPostgres(accountId) {
 
   const query = `
   SELECT
+      collateral_type,
       SUM(CAST(amount_usd AS DECIMAL)) AS total_amount_usd
   FROM prod_eth_mainnet.fct_core_rewards_claimed_eth_mainnet
-  WHERE account_id = $1;
+  WHERE account_id = $1
+  group by collateral_type;
   `;
+
   const queryResult = await pgQuery(query, [accountId]);
   if (!queryResult) {
     return { error: 'Query error.' };
   }
-  const totalAmountUsd = queryResult.rows[0].total_amount_usd;
+  const responseData = queryResult.rows;
 
   log.debug('[MainnetClaimedRewards] Setting cache..');
   const cacheKey = `${cacheKeyPrefix}-${accountId}`;
-  await setCache(cacheKey, totalAmountUsd, 300);
-  return totalAmountUsd;
+  await setCache(cacheKey, responseData, 300);
+  return responseData;
 }
