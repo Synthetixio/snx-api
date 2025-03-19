@@ -51,7 +51,7 @@ const cacheKeyPrefix = 'mainnet-rewards-claimed';
 router.get('/', async (req, res, next) => {
   try {
     log.debug('Checking cache..');
-    let { accountId } = req.query;
+    let { accountId, groupBy } = req.query;
     accountId = accountId ? accountId.replace(/\n|\r/g, '') : accountId;
 
     if (!/^\d+$/.test(accountId)) {
@@ -60,7 +60,11 @@ router.get('/', async (req, res, next) => {
         .json({ error: 'accountId must be a positive integer' });
     }
 
-    const cacheKey = `${cacheKeyPrefix}-${accountId}`;
+    if (!groupBy) {
+      groupBy = 'collateral_type';
+    }
+
+    const cacheKey = `${cacheKeyPrefix}-${accountId}-${groupBy}`;
     const cachedResponse = await getCache(cacheKey);
 
     if (cachedResponse) {
@@ -68,7 +72,7 @@ router.get('/', async (req, res, next) => {
       res.json(cachedResponse);
     } else {
       log.debug('Cache not found, executing..');
-      const responseData = await fetchDataFromPostgres(accountId);
+      const responseData = await fetchDataFromPostgres(accountId, groupBy);
       res.json(responseData);
     }
   } catch (error) {
@@ -77,16 +81,26 @@ router.get('/', async (req, res, next) => {
   }
 });
 module.exports = router;
-async function fetchDataFromPostgres(accountId) {
+async function fetchDataFromPostgres(accountId, groupByColumn) {
   log.debug('[MainnetClaimedRewards] Fetching data from postgres..');
+
+  const validGroupByColumns = [
+    'collateral_type',
+    'reward_type',
+    'token_symbol',
+  ];
+
+  if (!validGroupByColumns.includes(groupByColumn)) {
+    return { error: 'Invalid group by column.' };
+  }
 
   const query = `
   SELECT
-      collateral_type,
+      ${groupByColumn},
       SUM(CAST(amount_usd AS DECIMAL)) AS total_amount_usd
   FROM prod_eth_mainnet.fct_core_rewards_claimed_eth_mainnet
   WHERE account_id = $1
-  group by collateral_type;
+  GROUP BY ${groupByColumn};
   `;
 
   const queryResult = await pgQuery(query, [accountId]);
@@ -96,7 +110,7 @@ async function fetchDataFromPostgres(accountId) {
   const responseData = queryResult.rows;
 
   log.debug('[MainnetClaimedRewards] Setting cache..');
-  const cacheKey = `${cacheKeyPrefix}-${accountId}`;
+  const cacheKey = `${cacheKeyPrefix}-${accountId}-${groupByColumn}`;
   await setCache(cacheKey, responseData, 300);
   return responseData;
 }
