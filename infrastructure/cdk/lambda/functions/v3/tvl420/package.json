@@ -1,0 +1,7 @@
+{
+  "name": "tvl420-lambda",
+  "version": "1.0.0",
+  "description": "Synthetix API Lambda function",
+  "main": "index.js",
+  "dependencies": {}
+}

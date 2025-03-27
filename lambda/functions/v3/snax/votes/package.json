@@ -1,0 +1,7 @@
+{
+  "name": "votes-lambda",
+  "version": "1.0.0",
+  "description": "Lambda function for votes",
+  "main": "index.js",
+  "dependencies": {}
+}

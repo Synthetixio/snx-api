@@ -1,0 +1,7 @@
+{
+  "name": "circulating-supply-lambda",
+  "version": "1.0.0",
+  "description": "Lambda function for circulating-supply",
+  "main": "index.js",
+  "dependencies": {}
+}

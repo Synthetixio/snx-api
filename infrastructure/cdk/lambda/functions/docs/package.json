@@ -1,0 +1,10 @@
+{
+  "name": "snx-api-docs-function",
+  "version": "1.0.0",
+  "description": "Synthetix API Documentation Function",
+  "main": "index.js",
+  "dependencies": {
+    "swagger-ui-express": "^4.6.3",
+    "yamljs": "^0.3.0"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "total-supply-lambda",
+  "version": "1.0.0",
+  "description": "Lambda function for total-supply",
+  "main": "index.js",
+  "dependencies": {}
+}

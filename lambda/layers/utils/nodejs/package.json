@@ -1,0 +1,9 @@
+{
+  "name": "utils-layer",
+  "version": "1.0.0",
+  "description": "Utilities for SNX API Lambda functions",
+  "main": "index.js",
+  "dependencies": {
+    "winston": "^3.3.3"
+  }
+}

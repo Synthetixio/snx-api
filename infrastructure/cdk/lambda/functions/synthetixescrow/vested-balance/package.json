@@ -1,0 +1,7 @@
+{
+  "name": "snx-api-synthetixescrow-vested-balance-function",
+  "version": "1.0.0",
+  "description": "Synthetix API SynthetixEscrow Vested Balance Function",
+  "main": "index.js",
+  "dependencies": {}
+}

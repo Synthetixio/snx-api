@@ -1,0 +1,7 @@
+{
+  "name": "snx-api-total-supply-function",
+  "version": "1.0.0",
+  "description": "Synthetix API Total Supply Function",
+  "main": "index.js",
+  "dependencies": {}
+}

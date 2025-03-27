@@ -1,0 +1,7 @@
+{
+  "name": "snx-api-tvl-function",
+  "version": "1.0.0",
+  "description": "Synthetix API TVL Function",
+  "main": "index.js",
+  "dependencies": {}
+}

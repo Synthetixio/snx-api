@@ -1,0 +1,7 @@
+{
+  "name": "lt-leaderboard-lambda",
+  "version": "1.0.0",
+  "description": "Lambda function for lt-leaderboard",
+  "main": "index.js",
+  "dependencies": {}
+}

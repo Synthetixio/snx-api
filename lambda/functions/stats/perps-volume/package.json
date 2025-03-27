@@ -1,0 +1,7 @@
+{
+  "name": "perps-volume-lambda",
+  "version": "1.0.0",
+  "description": "Lambda function for perps-volume",
+  "main": "index.js",
+  "dependencies": {}
+}

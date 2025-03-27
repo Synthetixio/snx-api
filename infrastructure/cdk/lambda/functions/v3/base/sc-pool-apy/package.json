@@ -1,0 +1,7 @@
+{
+  "name": "snx-api-base-sc-pool-apy-function",
+  "version": "1.0.0",
+  "description": "Synthetix API Base SC Pool APY Function",
+  "main": "index.js",
+  "dependencies": {}
+}
