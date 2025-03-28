@@ -1,7 +1,0 @@
-{
-  "name": "status-lambda",
-  "version": "1.0.0",
-  "description": "Lambda function for status",
-  "main": "index.js",
-  "dependencies": {}
-}

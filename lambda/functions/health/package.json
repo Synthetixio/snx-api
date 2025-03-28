@@ -1,7 +1,0 @@
-{
-  "name": "health-lambda",
-  "version": "1.0.0",
-  "description": "Lambda function for health",
-  "main": "index.js",
-  "dependencies": {}
-}

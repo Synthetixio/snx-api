@@ -1,7 +1,0 @@
-{
-  "name": "escrowed-balance-lambda",
-  "version": "1.0.0",
-  "description": "Lambda function for escrowed-balance",
-  "main": "index.js",
-  "dependencies": {}
-}

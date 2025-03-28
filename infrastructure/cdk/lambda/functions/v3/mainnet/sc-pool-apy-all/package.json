@@ -1,7 +1,9 @@
 {
   "name": "sc-pool-apy-all-lambda",
   "version": "1.0.0",
-  "description": "Synthetix API Lambda function",
+  "description": "Lambda function for sc-pool-apy-all",
   "main": "index.js",
-  "dependencies": {}
+  "dependencies": {
+    "aws-sdk": "^2.1520.0"
+  }
 }
